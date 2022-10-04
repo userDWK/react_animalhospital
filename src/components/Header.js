@@ -158,7 +158,7 @@ const Item = styled.li`
   &:last-child {
     border: solid 1px #dfdfdf;
     border-radius: 3rem;
-    padding: 1.25rem 2rem 1.55rem;
+    padding: 1.35rem 2rem 1.35rem;
     margin-right: 0;
     ${shadow(0)}
 
