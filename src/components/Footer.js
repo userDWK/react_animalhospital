@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { media } from "../style/styleUtil";
+import { media } from "../assets/style/styleUtil";
 
 const sns = [
   { href: "/", icon: faFacebook },

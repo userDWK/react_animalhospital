@@ -2,7 +2,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import MainImg from "../sources/images/main.jpg";
-import { media } from "../style/styleUtil";
+import { media } from "../assets/style/styleUtil";
 
 const Main = () => {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { media, shadow } from "../style/styleUtil";
+import { media, shadow } from "../assets/style/styleUtil";
 
 const item = [
   { label: "", className: "line" },
