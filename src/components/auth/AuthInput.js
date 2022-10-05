@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { shadow } from "../../assets/style/styleUtil";
 
 const AuthInput = ({ ...rest }) => {
   return (
@@ -27,4 +28,11 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 1rem 0 1rem 1rem;
   font-size: 1.4rem;
+  border: solid 2px lightgray;
+  border-radius: 5px;
+
+  &:focus {
+    ${shadow(2)};
+    outline: none;
+  }
 `;
