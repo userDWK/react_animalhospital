@@ -156,15 +156,20 @@ const Item = styled.li`
   }
 
   &:last-child {
-    border: solid 1px #dfdfdf;
-    border-radius: 3rem;
-    padding: 1.35rem 2rem 1.35rem;
     margin-right: 0;
-    ${shadow(0)}
+    padding: 1.35rem 0;
+    a {
+      border: solid 1px #dfdfdf;
+      border-radius: 3rem;
+      padding: 1.35rem 2rem 1.35rem;
+      ${shadow(0)}
+    }
 
     &:hover {
-      ${shadow(1)}
-      color: rgb(21, 177, 125);
+      a {
+        ${shadow(1)}
+        color: rgb(21, 177, 125);
+      }
     }
   }
 `;
