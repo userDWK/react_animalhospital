@@ -2,6 +2,8 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { media, shadow } from "../assets/style/styleUtil";
+import { useSelector } from "react-redux";
+import { authService } from "../fbase";
 
 const item = [
   { label: "", className: "line" },
@@ -12,6 +14,8 @@ const item = [
 const Header = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [text, setText] = useState("");
+
+  const loggedIn = useSelector((state) => state.userData.loggedIn);
 
   const searchHover = (e) => {
     setIsSearch((prev) => !prev);
@@ -24,6 +28,14 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setText("");
+  };
+
+  const handleLogout = async (e) => {
+    try {
+      await authService.signOut();
+    } catch (e) {
+      console.error(e);
+    }
   };
   return (
     <Container>
@@ -48,7 +60,11 @@ const Header = () => {
             {item.map((menu, idx) => {
               return (
                 <Item key={idx}>
-                  <NavLink to={menu?.href}>{menu.label}</NavLink>
+                  {menu.label !== "login" || !loggedIn ? (
+                    <NavLink to={menu?.href}>{menu.label}</NavLink>
+                  ) : (
+                    <LogOut onClick={handleLogout}>log out</LogOut>
+                  )}
                 </Item>
               );
             })}
@@ -183,5 +199,19 @@ const Button = styled.button`
   &:hover {
     color: red;
     font-weight: 600;
+  }
+`;
+
+const LogOut = styled.button`
+  border: solid 1px #dfdfdf;
+  border-radius: 3rem;
+  padding: 1.35rem 2rem 1.35rem;
+  background: transparent;
+  ${shadow(0)}
+  cursor: pointer;
+  &:hover {
+    font-weight: 600;
+    ${shadow(1)}
+    color: rgb(21, 177, 125);
   }
 `;

@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { shadow } from "../../assets/style/styleUtil";
 
 const AuthInput = ({ ...rest }) => {
-  console.log(rest);
   return (
     <InputBox>
       <Label htmlFor={rest.htmlFor}>{rest.text}</Label>

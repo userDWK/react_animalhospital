@@ -4,8 +4,8 @@ import AuthInput from "../components/auth/AuthInput";
 import { media, shadow } from "../assets/style/styleUtil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { useLocation } from "react-router-dom";
-import { authService } from "../fbase";
+import { useLocation, useNavigate } from "react-router-dom";
+import { authService, dbService } from "../fbase";
 
 const loginProps = [
   {
@@ -82,7 +82,9 @@ const Login = () => {
   const [checkPassword, setCheckPassword] = useState("");
   const [nick, setNick] = useState("");
   const [phone, setPhone] = useState("");
+
   const location = useLocation().pathname.slice(1);
+  const navigate = useNavigate();
 
   const handleData = (e) => {
     const {
@@ -103,21 +105,39 @@ const Login = () => {
   };
 
   const handleForm = async (e) => {
-    if (location === "login") {
-    } else if (location === "create") {
-      if (password !== checkPassword) return;
+    e.preventDefault();
 
-      try {
-        authService.createUserWithEmailAndPassword(email, password);
-      } catch (e) {
-        console.error(e);
+    try {
+      if (location === "login") {
+        await authService.signInWithEmailAndPassword(email, password);
+      } else if (location === "create") {
+        if (password !== checkPassword) return;
+        const data = {
+          email,
+          password,
+          nick,
+          phone,
+        };
+        await authService.createUserWithEmailAndPassword(email, password);
+
+        const uid = authService.currentUser.uid;
+        await dbService
+          .collection("users")
+          .doc(uid)
+          .set({
+            ...data,
+            uid: uid,
+          });
       }
-      setEmail("");
-      setPassword("");
-      setCheckPassword("");
-      setNick("");
-      setPhone("");
+      navigate("/");
+    } catch (e) {
+      console.log(e);
     }
+    setEmail("");
+    setPassword("");
+    setCheckPassword("");
+    setNick("");
+    setPhone("");
   };
 
   return (
@@ -128,7 +148,7 @@ const Login = () => {
           {(location === "login" ? loginProps : createProps).map(
             (props, idx) => {
               // const value = [email, password];
-              const value = [email, password, checkPassword, phone, nick];
+              const value = [email, password, checkPassword, nick, phone];
               return (
                 <AuthInput
                   key={props.name}

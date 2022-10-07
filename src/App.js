@@ -1,19 +1,52 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import Main from "./pages/Main";
 import "./assets/style/styles.css";
-import CreateAccount from "./pages/CreateAccount";
-
+import { useCallback, useEffect } from "react";
+import { authService, dbService } from "./fbase";
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn, setUid, setUser } from "./redux/feature/userSlice";
+import { getDoc } from "firebase/firestore";
 function App() {
+  const dispatch = useDispatch();
+
+  const searchUser = useCallback(
+    async (uid) => {
+      const docRef = dbService.collection("users").doc(uid);
+      const docSnap = await getDoc(docRef);
+      dispatch(setUser(docSnap.data()));
+    },
+    [dispatch]
+  );
+
+  const AuthChanged = useCallback(async () => {
+    authService.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(setUid(user.uid));
+        dispatch(setIsLoggedIn(true));
+        searchUser(user.uid);
+      } else {
+        dispatch(setIsLoggedIn(false));
+        dispatch(setUser({}));
+        dispatch(setUid({}));
+        console.log("e");
+      }
+    });
+  }, [dispatch, searchUser]);
+
+  useEffect(() => {
+    AuthChanged();
+  }, [AuthChanged, searchUser]);
+
   return (
     <>
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/create" element={<CreateAccount />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/create" element={<Auth />} />
       </Routes>
       <Footer />
     </>
