@@ -16,7 +16,7 @@ const AlarmModal = ({ setIsModal, ...rest }) => {
         <ModalBox>
           <TextBox>
             <Text>
-              <Type>${message.type}</Type>
+              <Type>{message.type}</Type>
               {` :  ${message.text}`}
             </Text>
           </TextBox>
@@ -54,12 +54,13 @@ const ModalBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 45rem;
+  min-height: 15rem;
   padding: 0 0 10rem;
   background: #eee;
   border-radius: 1rem;
 `;
 const TextBox = styled.div`
-  margin: 3rem 0 0 3rem;
+  margin: 3rem;
 `;
 const Text = styled.p`
   font-size: 1.5rem;
@@ -78,6 +79,7 @@ const MoveBtn = styled.button`
   border: 0;
   margin-right: 1rem;
   padding: 0.5rem 1rem;
+  font-size: 1.25rem;
 
   &:hover {
     background: rgb(150, 200, 240);

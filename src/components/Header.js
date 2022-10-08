@@ -57,8 +57,8 @@ const Header = () => {
     line.style.width = elWidth + "px";
     line.style.left = elLeft - parentLeft + "px";
     line.style.top = !Math.ceil(parentRight - elRight)
-      ? elHeight + "px"
-      : parentHeight - elHeight + "px";
+      ? elHeight + 5 + "px"
+      : parentHeight - elHeight / 3 + "px";
   };
 
   const listEvent = useCallback(() => {
@@ -117,7 +117,7 @@ const Header = () => {
             {item.map((menu, idx) => {
               return (
                 <Item
-                  st={loggedIn && menu.label !== "login" && true}
+                  st={loggedIn && menu.label === "login" && true}
                   key={idx}
                   id={menu.id}
                   className={menu.className}
@@ -166,18 +166,24 @@ const Row = styled.div`
     left: 0;
     display: block;
     width: 100%;
-    height: 1px;
+    height: 0.1rem;
     background-color: lightgray;
   }
+  ${media.xs`
+  align-items: baseline;
+        position : relative;
+        width : 100%;
+        height : 20rem;
+        `}
 `;
 
 const LoGo = styled.div`
+  display: flex;
+  align-items: center;
   text-align: center;
   font-size: 2rem;
   font-weight: 900;
   color: gray;
-  display: flex;
-  align-items: center;
 
   a {
     line-height: 1rem;
@@ -202,14 +208,27 @@ const SearchBox = styled.form`
           margin-bottom: 3rem;
           margin-right: 10rem;
         `}
+
+  ${media.xs`
+        position : absolute;
+        justify-content : center;
+        left : 0;
+        bottom  : 20%;
+        width : 100%;
+        `}
 `;
 const SearchText = styled.input`
   width: 25rem;
   height: 3.5rem;
   padding-left: 1rem;
-  border: solid 1px #dfdfdf;
+  border: solid 0.1rem #dfdfdf;
   border-bottom-left-radius: 0.75rem;
   border-top-left-radius: 0.75rem;
+  font-size: 1.15rem;
+  ${media.xs`
+  width : 40rem;
+  height : 5rem;
+  `}
 `;
 const SearchBtn = styled.button`
   width: 5rem;
@@ -229,6 +248,11 @@ const SearchBtn = styled.button`
   &:active {
     ${shadow(1)}
   }
+
+  ${media.xs`
+  width : 10rem;
+  height : 5rem;
+  `}
 `;
 
 const Nav = styled.nav``;
@@ -241,14 +265,6 @@ const Item = styled.li`
   font-size: 1.5rem;
   margin-right: 2.5rem;
   cursor: pointer;
-
-  ${(props) =>
-    props.st &&
-    css`
-      &:last-child {
-        padding: 0;
-      }
-    `}
 
   ${(props) =>
     props.className === "line" &&
@@ -268,8 +284,15 @@ const Item = styled.li`
   &:last-child {
     margin-right: 0;
     padding: 1.35rem 0;
+
+    ${(props) =>
+      props.st &&
+      css`
+        padding: 0;
+      `}
+
     a {
-      border: solid 1px #dfdfdf;
+      border: solid 0.1rem #dfdfdf;
       border-radius: 3rem;
       padding: 1.35rem 2rem;
       width: 100%;
@@ -299,9 +322,9 @@ const Button = styled.button`
 `;
 
 const LogOut = styled.button`
-  border: solid 1px #dfdfdf;
+  border: solid 0.1rem #dfdfdf;
   border-radius: 3rem;
-  padding: 1.35rem 2rem 1.35rem;
+  padding: 1.35rem 2rem;
   background: transparent;
   font-size: 1.5rem;
   ${shadow(0)}

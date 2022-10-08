@@ -120,7 +120,7 @@ const SubmitBtn = styled.button`
     font-weight: 600;
   }
   &:active {
-    box-shadow: 2px 2px 2px gray;
+    box-shadow: 0.2rem 0.2rem 0.2rem gray;
   }
 `;
 

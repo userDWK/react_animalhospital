@@ -116,7 +116,7 @@ const Container = styled.footer`
     left: 0;
     display: block;
     width: 100%;
-    height: 1px;
+    height: 0.1rem;
     background-color: lightgray;
   }
 
@@ -147,7 +147,7 @@ const Item = styled.li`
     left: 0;
     display: block;
     width: 100%;
-    height: 1px;
+    height: 0.1rem;
     background-color: lightgray;
     margin : 3rem 0;
     }
@@ -185,7 +185,7 @@ const Content = styled.li`
 const Copy = styled.div`
   margin-top: 3rem;
   padding: 3rem 0;
-  border-top: solid 1px #dfdfdf;
+  border-top: solid 0.1rem #dfdfdf;
   width: 100%;
   text-align: center;
   font-size: 1.2rem;

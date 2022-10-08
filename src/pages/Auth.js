@@ -291,8 +291,8 @@ const SubmitBtn = styled.button`
   padding: 0.65rem 0;
   color: black;
   background: beige;
-  border: solid 2px lightgray;
-  border-radius: 5px;
+  border: solid 0.2rem lightgray;
+  border-radius: 0.5rem;
   font-size: 1.25rem;
   font-weight: bold;
   cursor: pointer;
@@ -314,7 +314,7 @@ const FootBox = styled.div`
   align-items: center;
   margin: 5rem 0;
   padding: 2rem 1rem;
-  border-top: solid 1px #999;
+  border-top: solid 0.1rem #999;
 `;
 
 const HelpCon = styled.div`
@@ -325,11 +325,11 @@ const HelpCon = styled.div`
 
   a {
     &:hover {
-      border-bottom: solid 1px cadetblue;
+      border-bottom: solid 0.1rem cadetblue;
       font-weight: bold;
     }
     &:active {
-      text-shadow: 0 0 1px rgb(21, 177, 125);
+      text-shadow: 0 0 0.1rem rgb(21, 177, 125);
     }
   }
 `;
@@ -347,11 +347,11 @@ const SearchCon = styled.div`
 
     button {
       &:hover {
-        border-bottom: solid 1px cadetblue;
+        border-bottom: solid 0.1rem cadetblue;
         font-weight: bold;
       }
       &:active {
-        text-shadow: 0 0 1px rgb(21, 177, 125);
+        text-shadow: 0 0 0.1rem rgb(21, 177, 125);
       }
     }
   }

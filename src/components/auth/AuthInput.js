@@ -28,8 +28,8 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 1rem 0 1rem 1rem;
   font-size: 1.4rem;
-  border: solid 2px lightgray;
-  border-radius: 5px;
+  border: solid 0.2rem lightgray;
+  border-radius: 0.5rem;
 
   &:focus {
     ${shadow(2)};
