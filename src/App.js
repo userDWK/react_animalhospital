@@ -9,6 +9,7 @@ import { authService, dbService } from "./fbase";
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setUid, setUser } from "./redux/feature/userSlice";
 import { getDoc } from "firebase/firestore";
+import Profile from "./pages/Profile";
 function App() {
   const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ function App() {
         dispatch(setIsLoggedIn(false));
         dispatch(setUser({}));
         dispatch(setUid({}));
-        console.log("e");
+        console.log("로그아웃 상태");
       }
     });
   }, [dispatch, searchUser]);
@@ -47,6 +48,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Auth />} />
         <Route path="/create" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
     </>

@@ -3,9 +3,12 @@ import styled from "styled-components";
 import AuthInput from "../components/auth/AuthInput";
 import { media, shadow } from "../assets/style/styleUtil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authService, dbService } from "../fbase";
+import FindModal from "../components/auth/InputModal";
+import firebase from "firebase/compat/app";
+import { getDoc } from "firebase/firestore";
 
 const loginProps = [
   {
@@ -82,6 +85,7 @@ const Login = () => {
   const [checkPassword, setCheckPassword] = useState("");
   const [nick, setNick] = useState("");
   const [phone, setPhone] = useState("");
+  const [isModal, setIsModal] = useState(false);
 
   const location = useLocation().pathname.slice(1);
   const navigate = useNavigate();
@@ -140,8 +144,63 @@ const Login = () => {
     setPhone("");
   };
 
+  const socialLogin = async (e) => {
+    e.preventDefault();
+    try {
+      let user = {};
+      if (e.target.closest("#google")) {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope("profile");
+        provider.addScope("email");
+        await authService.signInWithPopup(provider).then((result) => {
+          user = result.user;
+        });
+        const docRef = dbService.collection("users").doc(user.uid);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.data()) {
+          await dbService.collection("users").doc(user.uid).set({
+            uid: user.uid,
+            email: user.email,
+            nick: user.displayName,
+            phone: user.phoneNumber,
+          });
+        }
+      } else if (e.target.closest("#github")) {
+        const provider = new firebase.auth.GithubAuthProvider();
+        provider.addScope("refo");
+
+        await authService.signInWithPopup(provider).then((result) => {
+          user = result.user;
+          console.log(user);
+        });
+        const docRef = dbService.collection("users").doc(user.uid);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.data()) {
+          await dbService.collection("users").doc(user.uid).set({
+            uid: user.uid,
+            email: user.email,
+            nick: user.displayName,
+            phone: user.phoneNumber,
+          });
+        }
+      }
+      navigate("/");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <Container>
+      {isModal && (
+        <FindModal
+          onClick={() => setIsModal(false)}
+          email={email}
+          setEmail={setEmail}
+          handleData={handleData}
+          setIsModal={setIsModal}
+        />
+      )}
       <Column>
         <Title>{location === "login" ? "Sign In" : "Create Account"}</Title>
         <Form onSubmit={handleForm}>
@@ -169,18 +228,25 @@ const Login = () => {
                 <a href="/create">회원 가입</a>
               </CreateCon>
               <SearchCon>
-                <a href="/search">계정 찾기</a>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsModal(true);
+                  }}
+                >
+                  <a href="/find">계정 찾기</a>
+                </button>
               </SearchCon>
             </HelpCon>
             <SocialCon>
-              <Google>
+              <Google id="google" onClick={socialLogin}>
                 <FontAwesomeIcon icon={faGoogle} />
                 <GoogleText>Google Login</GoogleText>
               </Google>
-              <FaceBook>
-                <FontAwesomeIcon icon={faFacebookF} />
-                <FacebookText>Facebook Login</FacebookText>
-              </FaceBook>
+              <GitHub id="github" onClick={socialLogin}>
+                <FontAwesomeIcon icon={faGithub} />
+                <GithubText>Github Login</GithubText>
+              </GitHub>
             </SocialCon>
           </FootBox>
         )}
@@ -262,28 +328,53 @@ const HelpCon = styled.div`
       border-bottom: solid 1px cadetblue;
       font-weight: bold;
     }
+    &:active {
+      text-shadow: 0 0 1px rgb(21, 177, 125);
+    }
   }
 `;
 const CreateCon = styled.div`
   margin-bottom: 0.5rem;
 `;
-const SearchCon = styled.div``;
+const SearchCon = styled.div`
+  button {
+    background: transparent;
+    border: none;
+    color: #333;
+    text-align: left;
+    font-size: 1.4rem;
+    font-weight: bold;
+
+    button {
+      &:hover {
+        border-bottom: solid 1px cadetblue;
+        font-weight: bold;
+      }
+      &:active {
+        text-shadow: 0 0 1px rgb(21, 177, 125);
+      }
+    }
+  }
+`;
 
 const SocialCon = styled.div`
   display: flex;
+
+  ${media.xs`
+  flex-direction : column;
+  `}
 `;
 const Google = styled.button`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 15rem;
   background: #fefefe;
   border: none;
   border-radius: 1rem;
-  padding: 1rem 0.25rem;
   margin-right: 1rem;
-  text-align: left;
+  padding: 1rem 1.25rem;
+  font-size: 1.5rem;
   cursor: pointer;
   &:hover {
     transform: scale(1.1);
@@ -293,13 +384,16 @@ const Google = styled.button`
     ${shadow(2)}
   }
   svg {
-    width: 2rem;
     margin: 0 0.5rem;
     font-size: 2rem;
     color: red;
   }
+
+  ${media.xs`
+  margin : 0.5rem 0;
+  `}
 `;
-const FaceBook = styled(Google)`
+const GitHub = styled(Google)`
   margin-right: 0;
   &:active {
   }
@@ -310,9 +404,7 @@ const FaceBook = styled(Google)`
 
 const GoogleText = styled.span`
   flex: 1;
-  padding-left: 1.5rem;
+  margin: 0 auto;
   font-weight: bold;
 `;
-const FacebookText = styled(GoogleText)`
-  padding-left: 0.5rem;
-`;
+const GithubText = styled(GoogleText)``;
