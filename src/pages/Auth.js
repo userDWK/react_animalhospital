@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import AuthInput from "../components/auth/AuthInput";
-import { media, shadow } from "../assets/style/styleUtil";
+import { media, shadow, theme } from "../assets/style/styleUtil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -259,13 +259,13 @@ export default Login;
 
 const Container = styled.div`
   position: relative;
-  width: 120rem;
+  width: 100%;
   height: 80rem;
-  margin: 5rem auto;
+  margin: 0 auto;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
-  background: rgba(200, 240, 210, 0.9);
+  background: ${theme("beige")};
 
   ${media.xl`
   width : 100%;
@@ -279,7 +279,7 @@ const Column = styled.div`
 `;
 
 const Title = styled.h1`
-  color: #555;
+  color: ${theme("darkgreen")};
   font-size: 2.75rem;
   letter-spacing: 0.2rem;
 `;
@@ -289,18 +289,19 @@ const Form = styled.form``;
 const SubmitBtn = styled.button`
   width: 40rem;
   padding: 0.65rem 0;
-  color: black;
+  color: ${theme("black")};
   background: beige;
-  border: solid 0.2rem lightgray;
+  border: solid 1px ${theme("gray")};
   border-radius: 0.5rem;
   font-size: 1.25rem;
   font-weight: bold;
+  letter-spacing: 0.2rem;
   cursor: pointer;
 
   &:hover {
     ${shadow(0)};
-    color: rgb(21, 177, 125);
-    background-color: aliceblue;
+    color: ${theme("green")};
+    background: aliceblue;
   }
 
   &:active {
@@ -312,26 +313,34 @@ const FootBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin: 5rem 0;
   padding: 2rem 1rem;
-  border-top: solid 0.1rem #999;
+  border-top: solid 1px ${theme("gray")};
 `;
 
 const HelpCon = styled.div`
-  color: #333;
+  color: ${theme("darkgreen")};
   text-align: left;
   font-size: 1.4rem;
   font-weight: bold;
 
-  a {
+  a,
+  button {
     &:hover {
-      border-bottom: solid 0.1rem cadetblue;
+      border-bottom: solid 1px ${theme("darkgreen")};
       font-weight: bold;
     }
     &:active {
-      text-shadow: 0 0 0.1rem rgb(21, 177, 125);
+      text-shadow: 0 0 1px ${theme("green")};
     }
   }
+
+  ${media.xs`
+  display : flex;
+  justify-content : space-around;
+  width : 100%;
+  `}
 `;
 const CreateCon = styled.div`
   margin-bottom: 0.5rem;
@@ -340,27 +349,17 @@ const SearchCon = styled.div`
   button {
     background: transparent;
     border: none;
-    color: #333;
+    color: ${theme("darkgreen")};
     text-align: left;
     font-size: 1.4rem;
     font-weight: bold;
-
-    button {
-      &:hover {
-        border-bottom: solid 0.1rem cadetblue;
-        font-weight: bold;
-      }
-      &:active {
-        text-shadow: 0 0 0.1rem rgb(21, 177, 125);
-      }
-    }
   }
 `;
 
 const SocialCon = styled.div`
   display: flex;
-
   ${media.xs`
+  width : 100%;
   flex-direction : column;
   `}
 `;
@@ -369,7 +368,7 @@ const Google = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fefefe;
+  background: ${theme("white")};
   border: none;
   border-radius: 1rem;
   margin-right: 1rem;
@@ -386,11 +385,11 @@ const Google = styled.button`
   svg {
     margin: 0 0.5rem;
     font-size: 2rem;
-    color: red;
+    color: ${theme("red")};
   }
 
   ${media.xs`
-  margin : 0.5rem 0;
+  margin : 1rem 0;
   `}
 `;
 const GitHub = styled(Google)`

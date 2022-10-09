@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { media, shadow } from "../assets/style/styleUtil";
+import { media, shadow, theme } from "../assets/style/styleUtil";
 import { useDispatch, useSelector } from "react-redux";
 import { authService } from "../fbase";
 import AlarmModal from "./AlarmModal";
@@ -56,7 +56,7 @@ const Header = () => {
 
     line.style.width = elWidth + "px";
     line.style.left = elLeft - parentLeft + "px";
-    line.style.top = !Math.ceil(parentRight - elRight)
+    line.style.top = !Math.floor(parentRight - elRight)
       ? elHeight + 5 + "px"
       : parentHeight - elHeight / 3 + "px";
   };
@@ -96,7 +96,10 @@ const Header = () => {
       {isModal && <AlarmModal setIsModal={setIsModal} />}
       <Row>
         <LoGo>
-          <NavLink to="/">PET HOSPITAL</NavLink>
+          <NavLink to="/">
+            PET
+            <br /> HOSPITAL
+          </NavLink>
         </LoGo>
 
         <SearchBox onSubmit={handleSearch} view={isSearch}>
@@ -144,31 +147,18 @@ const Header = () => {
 export default Header;
 
 const Container = styled.header`
-  width: 120rem;
-  margin: 0 auto;
-  background: #ffe;
-
-  ${media.lg`
-  width : 100%;
-  `}
+  background: ${theme("beige")};
+  width: 100%;
 `;
 const Row = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  margin: 0 auto;
   padding: 3rem 5rem;
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    height: 0.1rem;
-    background-color: lightgray;
-  }
   ${media.xs`
   align-items: baseline;
         position : relative;
@@ -183,11 +173,7 @@ const LoGo = styled.div`
   text-align: center;
   font-size: 2rem;
   font-weight: 900;
-  color: gray;
-
-  a {
-    line-height: 1rem;
-  }
+  color: ${theme("darkgreen")};
 `;
 
 const SearchBox = styled.form`
@@ -199,13 +185,11 @@ const SearchBox = styled.form`
       ? css`
           opacity: 1;
           z-index: 1;
-          margin-bottom: 0;
           margin-right: 0;
         `
       : css`
           opacity: 0;
           z-index: -1;
-          margin-bottom: 3rem;
           margin-right: 10rem;
         `}
 
@@ -213,7 +197,7 @@ const SearchBox = styled.form`
         position : absolute;
         justify-content : center;
         left : 0;
-        bottom  : 20%;
+        bottom  : 0%;
         width : 100%;
         `}
 `;
@@ -233,9 +217,9 @@ const SearchText = styled.input`
 const SearchBtn = styled.button`
   width: 5rem;
   height: 3.5rem;
-  background: rgb(180, 220, 250);
+  background: ${theme("sky")};
   font-size: 1.15rem;
-  color: #555;
+  color: ${theme("darkgray")};
   font-weight: 600;
   border: none;
   border-bottom-right-radius: 0.75rem;
@@ -272,7 +256,7 @@ const Item = styled.li`
       content: "";
       position: absolute;
       height: 0.1rem;
-      background: maroon;
+      background: ${theme("darkgreen")};
       transition: all 0.5s;
       transition-timing-function: cubic- bezier(ease-in-out);
     `}
@@ -302,7 +286,7 @@ const Item = styled.li`
     &:hover {
       a {
         ${shadow(1)}
-        color: rgb(21, 177, 125);
+        color: ${theme("green")};
       }
     }
   }
@@ -316,7 +300,7 @@ const Button = styled.button`
   margin-right: 2.5rem;
 
   &:hover {
-    color: red;
+    color: ${theme("red")};
     font-weight: 600;
   }
 `;
@@ -332,6 +316,6 @@ const LogOut = styled.button`
   &:hover {
     font-weight: 600;
     ${shadow(1)}
-    color: rgb(21, 177, 125);
+    color: ${theme("green")};
   }
 `;

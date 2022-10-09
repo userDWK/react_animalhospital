@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setUid, setUser } from "./redux/feature/userSlice";
 import { getDoc } from "firebase/firestore";
 import Profile from "./pages/Profile";
+import View from "./pages/View";
 function App() {
   const dispatch = useDispatch();
 
@@ -49,6 +50,7 @@ function App() {
         <Route path="/login" element={<Auth />} />
         <Route path="/create" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/view" element={<View />} />
       </Routes>
       <Footer />
     </>

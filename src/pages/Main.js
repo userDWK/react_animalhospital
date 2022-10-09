@@ -2,17 +2,14 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import MainImg from "../sources/images/main.jpg";
-import { media } from "../assets/style/styleUtil";
+import { media, theme } from "../assets/style/styleUtil";
 
 const Main = () => {
   return (
     <>
       <Container>
-        <Background />
+        {/* <Background /> */}
         <Row>
-          <ImgCon>
-            <Img src={MainImg} />
-          </ImgCon>
           <TextCon>
             <Title>동물들의 골든타임을 지켜주세요.</Title>
             <Desc>
@@ -25,6 +22,9 @@ const Main = () => {
               <FontAwesomeIcon icon={faArrowRight} />
             </Search>
           </TextCon>
+          <ImgCon>
+            <Img src={MainImg} />
+          </ImgCon>
         </Row>
       </Container>
     </>
@@ -35,72 +35,72 @@ export default Main;
 
 const Container = styled.main`
   position: relative;
-  width: 120rem;
-  margin: 10rem auto;
+  margin: 0 auto;
+`;
 
-  ${media.xl`
-  width : 100%;
-  `}
-`;
-const Background = styled.div`
-  box-sizing: content-box;
-  position: absolute;
-  top: -5rem;
-  width: 100%;
-  height: 100%;
-  padding: 5rem 0;
-  background: linear-gradient(to right, gray, beige);
-  opacity: 0.2;
-`;
 const Row = styled.div`
   display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
-`;
-const ImgCon = styled.div`
-  width: 50%;
-  margin: 0 4%;
+  height: 100%;
+  background: ${theme("beige")};
+  padding: 15rem 0;
 
   ${media.xs`
-  width : 100%;
-  padding : 0 10%;
+  flex-direction : column;
   `}
-`;
-const Img = styled.img`
-  width: 100%;
 `;
 
 const TextCon = styled.div`
   position: relative;
   width: 42%;
-  text-align: center;
-  padding-right: 5rem;
+  text-align: left;
+  padding-left: 5rem;
+  color: ${theme("darkgreen")};
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 11%;
+    width: 100%;
+    height: 1px;
+    background: ${theme("grayGradient")};
+    display: block;
+  }
 
   ${media.xs`
   width : 100%;
   padding : 0 10%;
+  &::before {
+    width : 80%;
+  }
   `}
 `;
 const Title = styled.h2`
   margin-top: 10%;
-  font-size: 2.75rem;
+  font-size: 4.8rem;
   font-weight: 600;
 
   ${media.xl`
-  font-size : 2.15rem;
+  font-size : 4.8rem;
+  `}
+  ${media.md`
+  font-size : 4.5rem;
   `}
 `;
 const Desc = styled.p`
-  margin-top: 6rem;
-  font-size: 1.9rem;
+  margin-top: 4rem;
+  font-size: 2.25rem;
 `;
 const Search = styled.button`
   position: absolute;
-  bottom: 2rem;
-  right: 13rem;
+  bottom: -40%;
+  right: 0;
   background: transparent;
   padding: 2rem 5rem;
   border: 0;
-  border-bottom: double 1px lightgray;
+  border-bottom: double 0.1rem ${theme("gray")};
   font-size: 2rem;
   font-weight: 600;
   cursor: pointer;
@@ -114,4 +114,23 @@ const Search = styled.button`
   left : 0;
   text-align : center;
   `}
+`;
+
+const ImgCon = styled.div`
+  flex: 1;
+  text-align: right;
+  ${media.xs`
+  width : 100%;
+  padding : 0 10%;
+  
+  ${media.xs`
+  margin-top : 10%;
+  `}
+  `}
+`;
+const Img = styled.img`
+  width: 80%;
+  height: 43rem;
+  border-top-left-radius: 30%;
+  border-bottom-left-radius: 10%;
 `;

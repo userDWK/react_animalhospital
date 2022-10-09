@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { media } from "../assets/style/styleUtil";
+import { media, theme } from "../assets/style/styleUtil";
 
 const sns = [
   { href: "/", icon: faFacebook },
@@ -106,8 +106,10 @@ export default Footer;
 
 const Container = styled.footer`
   position: relative;
-  width: 120rem;
+  width: 100%;
   margin: 0 auto;
+  padding-top: 10rem;
+  background: ${theme("beige")};
 
   &::before {
     content: "";
@@ -116,13 +118,9 @@ const Container = styled.footer`
     left: 0;
     display: block;
     width: 100%;
-    height: 0.1rem;
-    background-color: lightgray;
+    height: 1px;
+    background: ${theme("gray")};
   }
-
-  ${media.xl`
-  width : 100%;
-  `}
 `;
 const Row = styled.div``;
 const Nav = styled.nav``;
@@ -147,9 +145,9 @@ const Item = styled.li`
     left: 0;
     display: block;
     width: 100%;
-    height: 0.1rem;
-    background-color: lightgray;
-    margin : 3rem 0;
+    height: 1px;
+    background: ${theme("gray")};
+    margin : 5rem 0;
     }
   }
   `}
@@ -183,9 +181,9 @@ const Content = styled.li`
 `;
 
 const Copy = styled.div`
-  margin-top: 3rem;
-  padding: 3rem 0;
-  border-top: solid 0.1rem #dfdfdf;
+  margin-top: 5rem;
+  padding: 5rem 0;
+  border-top: solid 1px ${theme("gray")};
   width: 100%;
   text-align: center;
   font-size: 1.2rem;

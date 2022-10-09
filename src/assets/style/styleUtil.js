@@ -44,3 +44,24 @@ export const shadow = (weight) => {
 
   return shadows[weight];
 };
+
+export const theme = (color) => {
+  const colors = {
+    green: "rgb(21, 177, 125)",
+    darkgreen: "#2c4b48",
+    beige: "#f4f0eb",
+    darkbeige: "#e2d9cf",
+    red: "rgb(255, 40, 50)",
+    sky: "rgb(180, 220, 250)",
+    lightgray: "#eee",
+    gray: "#aaa",
+    darkgray: "#555",
+    white: "#fff",
+    black: "#000",
+    lightblack: "#333",
+    grayGradient:
+      "linear-gradient( to top, rgb(245,245,245), #aaa, rgb(245,245,245) );",
+  };
+
+  return colors[color];
+};

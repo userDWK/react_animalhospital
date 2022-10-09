@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { shadow } from "../../assets/style/styleUtil";
+import { shadow, theme } from "../../assets/style/styleUtil";
 
 const AuthInput = ({ ...rest }) => {
   return (
@@ -20,7 +20,7 @@ const InputBox = styled.div`
 `;
 const Label = styled.label`
   padding: 0 0 0.5rem 0.5rem;
-  color: gray;
+  color: ${theme("gray")};
   font-size: 1.5rem;
   text-align: left;
   font-weight: 600;

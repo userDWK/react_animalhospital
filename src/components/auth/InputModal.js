@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { theme } from "../../assets/style/styleUtil";
 import { authService } from "../../fbase";
 import AuthInput from "./AuthInput";
 
@@ -99,7 +100,7 @@ const ModalBox = styled.div`
   transform: translate(-50%, -50%);
   width: 60rem;
   padding: 0 0 7rem;
-  background: #eee;
+  background: ${theme("lightgray")};
 `;
 
 const BtnBox = styled.div`
@@ -111,12 +112,12 @@ const BtnBox = styled.div`
 const SubmitBtn = styled.button`
   margin-right: 1rem;
   padding: 1rem 1.25rem;
-  background: #aaa;
+  background: ${theme("gray")};
   border: none;
   border-radius: 0.3rem;
   cursor: pointer;
   &:hover {
-    background: rgb(120, 200, 250);
+    background: ${theme("sky")};
     font-weight: 600;
   }
   &:active {
@@ -126,6 +127,9 @@ const SubmitBtn = styled.button`
 
 const CancelBtn = styled(SubmitBtn)`
   margin-right: 0;
+  &:hover {
+    background: ${theme("red")};
+  }
 `;
 
 const Form = styled.form``;

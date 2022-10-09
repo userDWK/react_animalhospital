@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { shadow } from "../assets/style/styleUtil";
+import { media, shadow, theme } from "../assets/style/styleUtil";
 
 const AlarmModal = ({ setIsModal, ...rest }) => {
   const message = useSelector((state) => state.messageData.message);
@@ -17,7 +17,7 @@ const AlarmModal = ({ setIsModal, ...rest }) => {
           <TextBox>
             <Text>
               <Type>{message.type}</Type>
-              {` :  ${message.text}`}
+              {` :   ${message.text}`}
             </Text>
           </TextBox>
           <BtnBox>
@@ -50,7 +50,7 @@ const ModalCon = styled.div`
 
 const ModalBox = styled.div`
   position: absolute;
-  top: 10%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 45rem;
@@ -58,6 +58,10 @@ const ModalBox = styled.div`
   padding: 0 0 10rem;
   background: #eee;
   border-radius: 1rem;
+
+  ${media.xs`
+  width : 60rem;
+  `}
 `;
 const TextBox = styled.div`
   margin: 3rem;
@@ -67,7 +71,7 @@ const Text = styled.p`
   font-weight: 600;
 `;
 const Type = styled.span`
-  color: red;
+  color: ${theme("red")};
 `;
 const BtnBox = styled.div`
   position: absolute;
@@ -75,15 +79,16 @@ const BtnBox = styled.div`
   right: 1rem;
 `;
 const MoveBtn = styled.button`
-  background: lightgray;
+  background: ${theme("gray")};
   border: 0;
   margin-right: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
 
   &:hover {
-    background: rgb(150, 200, 240);
-    font-weight: 600;
+    background: ${theme("sky")};
     cursor: pointer;
     ${shadow(0)}
   }
@@ -93,6 +98,6 @@ const MoveBtn = styled.button`
 `;
 const CloseBtn = styled(MoveBtn)`
   &:hover {
-    background: rgb(255, 40, 50);
+    background: ${theme("red")};
   }
 `;
