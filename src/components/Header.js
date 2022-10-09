@@ -148,14 +148,13 @@ export default Header;
 
 const Container = styled.header`
   background: ${theme("beige")};
-  width: 100%;
 `;
 const Row = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 120rem;
   margin: 0 auto;
   padding: 3rem 5rem;
 
@@ -165,6 +164,10 @@ const Row = styled.div`
         width : 100%;
         height : 20rem;
         `}
+
+  ${media.xl`
+  width : 100%;
+  `}
 `;
 
 const LoGo = styled.div`

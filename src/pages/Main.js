@@ -35,19 +35,24 @@ export default Main;
 
 const Container = styled.main`
   position: relative;
-  margin: 0 auto;
+  background: ${theme("beige")};
 `;
 
 const Row = styled.div`
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
+  width: 120rem;
   height: 100%;
-  background: ${theme("beige")};
+  margin: 0 auto;
   padding: 15rem 0;
 
   ${media.xs`
   flex-direction : column;
+  `}
+
+  ${media.xl`
+  width : 100%;
   `}
 `;
 

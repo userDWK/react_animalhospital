@@ -258,24 +258,20 @@ const Login = () => {
 export default Login;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 80rem;
-  margin: 0 auto;
+  min-height: 80rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
   background: ${theme("beige")};
+`;
+const Column = styled.div`
+  width: 120rem;
+  margin: 0 auto;
+  padding: 10rem 0;
 
   ${media.xl`
   width : 100%;
   `}
-`;
-const Column = styled.div`
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -20%);
 `;
 
 const Title = styled.h1`
@@ -287,6 +283,7 @@ const Title = styled.h1`
 const Form = styled.form``;
 
 const SubmitBtn = styled.button`
+  position: relative;
   width: 40rem;
   padding: 0.65rem 0;
   color: ${theme("black")};
@@ -297,6 +294,16 @@ const SubmitBtn = styled.button`
   font-weight: bold;
   letter-spacing: 0.2rem;
   cursor: pointer;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -150%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: ${theme("gray")};
+  }
 
   &:hover {
     ${shadow(0)};
@@ -311,12 +318,13 @@ const SubmitBtn = styled.button`
 
 const FootBox = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin: 5rem 0;
+  margin: 6rem 0;
   padding: 2rem 1rem;
-  border-top: solid 1px ${theme("gray")};
+  /* border-top: solid 1px ${theme("gray")}; */
+  text-align: center;
 `;
 
 const HelpCon = styled.div`
@@ -324,6 +332,7 @@ const HelpCon = styled.div`
   text-align: left;
   font-size: 1.4rem;
   font-weight: bold;
+  margin-right: 1rem;
 
   a,
   button {

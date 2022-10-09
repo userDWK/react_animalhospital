@@ -115,6 +115,7 @@ const SubmitBtn = styled.button`
   background: ${theme("gray")};
   border: none;
   border-radius: 0.3rem;
+  font-size: 1.5rem;
   cursor: pointer;
   &:hover {
     background: ${theme("sky")};

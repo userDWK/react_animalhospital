@@ -131,25 +131,25 @@ export default Profile;
 
 const Container = styled.div`
   position: relative;
-  width: 120rem;
-  height: 80rem;
-  margin: 5rem auto;
+  min-height: 80rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
   /* background: rgba(200, 240, 210, 0.9); */
   background: ghostwhite;
-
-  ${media.xl`
-  width : 100%;
-  `}
 `;
 const Row = styled.div`
   display: flex;
   justify-content: space-around;
+  width: 120rem;
+  margin: 0 auto;
 
   ${media.xs`
   flex-direction : column;
+  `}
+
+  ${media.xl`
+  width : 100%;
   `}
 `;
 

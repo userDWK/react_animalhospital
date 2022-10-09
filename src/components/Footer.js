@@ -106,8 +106,6 @@ export default Footer;
 
 const Container = styled.footer`
   position: relative;
-  width: 100%;
-  margin: 0 auto;
   padding-top: 10rem;
   background: ${theme("beige")};
 
@@ -117,12 +115,20 @@ const Container = styled.footer`
     top: 0;
     left: 0;
     display: block;
-    width: 100%;
+    width: 120rem;
     height: 1px;
+    margin: 0 auto;
     background: ${theme("gray")};
   }
 `;
-const Row = styled.div``;
+const Row = styled.div`
+  width: 120rem;
+  margin: 0 auto;
+
+  ${media.xl`
+width : 100%;
+`}
+`;
 const Nav = styled.nav``;
 const List = styled.ul`
   display: flex;
