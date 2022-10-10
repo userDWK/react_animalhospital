@@ -1,8 +1,11 @@
-import styled, { css } from "styled-components";
-import { media, shadow, theme } from "../assets/style/styleUtil";
+import styled from "styled-components";
+import { media, theme } from "../assets/style/styleUtil";
 import Masonry from "react-masonry-component";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { dbService } from "../fbase";
+import { collection, getDocs } from "firebase/firestore";
+import basicProfile from "../sources/images/app.jpg";
 
 const region = [
   "해운대구",
@@ -24,38 +27,81 @@ const region = [
 ];
 
 const View = () => {
-  const [scrollY, setScrollY] = useState(0);
+  const [hospitals, setHospitals] = useState([]);
+  const [elHeight, setElHeight] = useState(0);
+  const [intelvalFun, setIntervalFunc] = useState(null);
+  const location = useLocation().pathname.slice(6);
+
   const masonryOptions = {
     itemSelector: ".gridItem",
   };
 
-  const followScroll = () => {
-    const interval = setInterval(() => {
-      try {
-        setScrollY(window.scrollY);
-        const region = document.querySelector(".region");
-        if (window.scrollY) {
-          region.style.left = "-50%";
-          region.style.opacity = 0;
-          region.style.width = 0;
-        } else {
-          region.style.left = 0;
-          region.style.opacity = 1;
-          region.style.width = "25%";
-        }
-      } catch (e) {
-        clearInterval(interval);
+  //location에 해당하는 병원 정보 요청하여 setState.
+  const getDisplayData = useCallback(async () => {
+    let data = [];
+    if (location) {
+      const querySnapshot = await getDocs(collection(dbService, location));
+      querySnapshot.forEach((doc) => {
+        data = [...data, ...doc.data().hospitals];
+      });
+      setHospitals(data);
+    } else {
+      region.forEach(async (gu) => {
+        const querySnapshot = await getDocs(collection(dbService, gu));
+        querySnapshot.forEach((doc) => {
+          data = [...data, ...doc.data().hospitals];
+          setHospitals(data);
+        });
+      });
+    }
+  }, [location]);
+
+  const followScroll = useCallback((elHeight) => {
+    setIntervalFunc((prev) => {
+      if (!prev) {
+        clearInterval(prev);
       }
-    }, 1 * 1000);
-  };
+
+      setInterval(() => {
+        const posY = window.scrollY;
+        try {
+          const region = document.querySelector(".region");
+          if (posY > 200) {
+            region.style.marginTop = posY + "px";
+          } else if (posY < 200) {
+            region.style.marginTop = 0;
+          }
+          if (posY > elHeight * 0.68) {
+            region.style.marginTop = elHeight * 0.68 + "px";
+          }
+        } catch (e) {
+          setIntervalFunc((prev) => {
+            clearInterval(prev);
+          });
+        }
+      }, 1 * 200);
+    });
+  }, []);
+  const a = useCallback(() => {
+    const main = document.querySelector(".main");
+    setElHeight(main.getBoundingClientRect().height);
+    if (elHeight > 0) {
+      followScroll(elHeight);
+    }
+  }, [elHeight, followScroll]);
 
   useEffect(() => {
-    // followScroll();
-  }, []);
+    setTimeout(() => {
+      a();
+    }, [1 * 1000]);
+    window.scrollTo(0, 0);
+
+    getDisplayData();
+  }, [location, getDisplayData, a]);
   return (
-    <Container>
+    <Container className="main">
       <Row>
-        <RegionBox className="region" scrollY={scrollY}>
+        <RegionBox className="region">
           <Region>
             <Link to="">전체</Link>
           </Region>
@@ -76,70 +122,22 @@ const View = () => {
             updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
             // imagesLoadedOptions={imagesLoadedOptions} // default {}
           >
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://www.hwasun.go.kr/culture/new/images/hwasun801_01.jpg"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQRasieESJNiRFefqktJL4qkTQhbeLt-nrJQ&usqp=CAU"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://w7.pngwing.com/pngs/402/653/png-transparent-ball-pocket-pocket-monster-poke-poke-ball-set-icon-thumbnail.png"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6gBc7B6Wfhcl58kElznvZItemDXrntcKIHXcw&usqp=CAU"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://t1.daumcdn.net/tistoryfile/fs11/33_tistory_2009_02_26_22_41_49a69bf854e7c?x-content-disposition=inItemne"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://t1.daumcdn.net/tistoryfile/fs15/20_tistory_2009_02_26_22_41_49a69c16abda8?x-content-disposition=inItemne"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://t1.daumcdn.net/tistoryfile/fs15/21_tistory_2009_02_26_22_41_49a69c15c5017?x-content-disposition=inItemne"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
-            <Item className="gridItem" scrollY={scrollY}>
-              <img
-                src="https://t1.daumcdn.net/tistoryfile/fs15/21_tistory_2009_02_26_22_41_49a69c15c5017?x-content-disposition=inItemne"
-                alt=""
-              />
-              <h1>메롱</h1>
-              <p>야호</p>
-            </Item>
+            {hospitals.map((hospital) => {
+              return (
+                <Item key={hospital.tel} className="gridItem">
+                  <ImgBox>
+                    <ThumImg
+                      src={hospital.thumUrl ? hospital.thumUrl : basicProfile}
+                      alt=""
+                    />
+                  </ImgBox>
+                  <TextBox>
+                    <HospitalName>{hospital.animal_hospital}</HospitalName>
+                    <HospitalAdd>{hospital.road_address}</HospitalAdd>
+                  </TextBox>
+                </Item>
+              );
+            })}
           </Masonry>
         </MasonryBox>
       </Row>
@@ -155,12 +153,14 @@ const Container = styled.div`
   font-family: "Cormorant", serif;
   font-size: 2rem;
   background: ${theme("beige")};
+  max-height: 100%;
 `;
 
 const Row = styled.div`
   position: relative;
   width: 120rem;
   margin: 0 auto;
+  display: flex;
 
   &::before {
     position: absolute;
@@ -173,42 +173,27 @@ const Row = styled.div`
     background: ${theme("gray")};
   }
 
-  ${media.xl`
+  ${media.lg`
   width : 100%;
   `}
 `;
 
 const MasonryBox = styled.div`
-  width: 70%;
-  margin-left: auto;
-
-  /* ${media.xxs`
-  width : 60%;
-  `} */
-
-  ${media.md`
-  width : 61%;
-  `}
+  width: 100%;
 `;
 
 const RegionBox = styled.div`
-  position: fixed;
-  top: 27rem;
+  position: relative;
   margin-left: 2rem;
   width: 30rem;
+  height: 100%;
   padding: 1rem 0;
   border: solid 1px ${theme("gray")};
   transition: all 0.5s;
-
-  ${media.xs`
-  top : 35rem;
-  `}
 `;
 
 const Region = styled.div`
   position: relative;
-  margin: 1rem auto;
-  width: 80%;
   font-size: 2.5rem;
 
   &::after {
@@ -249,11 +234,25 @@ const Item = styled.li`
   width: 30%;
   padding: 0 0 2rem 2rem;
   box-sizing: content-box;
-  img {
-    width: 100%;
-  }
+  cursor: pointer;
 
-  ${media.lg`
+  ${media.md`
   width : 45%;
   `}
+`;
+
+const ImgBox = styled.div``;
+const ThumImg = styled.img`
+  width: 100%;
+`;
+const TextBox = styled.div`
+  margin-top: 0.75rem;
+`;
+const HospitalName = styled.h5`
+  font-size: 2.25rem;
+  font-weight: bold;
+`;
+const HospitalAdd = styled.p`
+  padding-top: 1rem;
+  font-size: 2rem;
 `;
