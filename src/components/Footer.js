@@ -127,6 +127,7 @@ const Row = styled.div`
 
   ${media.xl`
 width : 100%;
+margin : 0;
 `}
 `;
 const Nav = styled.nav``;
