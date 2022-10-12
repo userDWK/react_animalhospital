@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/react_animalhospital/static/css/main.98935daf.css",
-    "main.js": "/react_animalhospital/static/js/main.339750e4.js",
+    "main.js": "/react_animalhospital/static/js/main.c2d27ac6.js",
     "static/media/main.jpg": "/react_animalhospital/static/media/main.5b81cacef14103d1efd2.jpg",
     "static/media/app.jpg": "/react_animalhospital/static/media/app.895629e80d6184f2b346.jpg",
     "index.html": "/react_animalhospital/index.html",
     "main.98935daf.css.map": "/react_animalhospital/static/css/main.98935daf.css.map",
-    "main.339750e4.js.map": "/react_animalhospital/static/js/main.339750e4.js.map"
+    "main.c2d27ac6.js.map": "/react_animalhospital/static/js/main.c2d27ac6.js.map"
   },
   "entrypoints": [
     "static/css/main.98935daf.css",
-    "static/js/main.339750e4.js"
+    "static/js/main.c2d27ac6.js"
   ]
 }
