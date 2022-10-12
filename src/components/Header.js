@@ -147,6 +147,7 @@ const Header = () => {
 export default Header;
 
 const Container = styled.header`
+  overflow-x: hidden;
   background: ${theme("beige")};
 `;
 const Row = styled.div`
@@ -155,18 +156,21 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 120rem;
+  height: 100%;
   margin: 0 auto;
   padding: 3rem 5rem;
 
   ${media.xs`
   align-items: baseline;
+  justify-content: center;
         position : relative;
         width : 100%;
-        height : 20rem;
+        height : 14rem;
+        margin : 0;
         `}
 
   ${media.xl`
-  width : 100%;
+  margin : 0;
   `}
 `;
 
@@ -202,6 +206,10 @@ const SearchBox = styled.form`
         left : 0;
         bottom  : 0%;
         width : 100%;
+        `}
+
+        ${media.xxs`
+        bottom  : -50%;
         `}
 `;
 const SearchText = styled.input`

@@ -105,7 +105,8 @@ const Footer = () => {
 export default Footer;
 
 const Container = styled.footer`
-  position: relative;
+  overflow-x: hidden;
+  bottom: 0;
   padding-top: 10rem;
   background: ${theme("beige")};
 
@@ -127,6 +128,12 @@ const Row = styled.div`
 
   ${media.xl`
 width : 100%;
+margin : 0;
+padding : 0;
+
+&::before {
+  margin : 0;
+}
 `}
 `;
 const Nav = styled.nav``;
