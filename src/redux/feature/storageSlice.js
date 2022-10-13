@@ -5,7 +5,11 @@ const storageSlice = createSlice({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   initialState: { select: {}, hospitals: [] },
+=======
+  initialState: { select: {} },
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
   initialState: { select: {} },
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
@@ -20,6 +24,7 @@ const storageSlice = createSlice({
       localStorage.setItem("SELECT_HOSPITAL", JSON.stringify(action.payload));
       state.select = action.payload;
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -100,6 +105,8 @@ const storageSlice = createSlice({
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   },
 });
 
@@ -107,7 +114,11 @@ export default storageSlice;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const { setSelect, setHospitalsInfo } = storageSlice.actions;
+=======
+export const { setSelect } = storageSlice.actions;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
 export const { setSelect } = storageSlice.actions;
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61

@@ -20,6 +20,9 @@ import firebase from "firebase/compat/app";
 import View from "./pages/View";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
@@ -55,6 +58,7 @@ function App() {
     });
   }, [dispatch, saveStateFromDbUsers]);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -239,6 +243,36 @@ function App() {
     } catch (e) {
       console.error("잘못되었다");
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  // 동물병원정보 + thum img 객체 firestore 저장. 구에 해당하는 doc 유무에 따라, set또는 update.
+  const saveHospitalDataInDb = useCallback(async (hospital, region) => {
+    try {
+      const docRef = dbService.collection("hospitals")?.doc(hospital.gugun);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.data() === undefined) {
+        // console.log("empty");
+        await dbService
+          .collection("hospitals")
+          .doc(hospital.gugun)
+          .set({
+            [region]: firebase.firestore.FieldValue.arrayUnion({
+              ...hospital,
+            }),
+          });
+      } else {
+        // console.log("no empty");
+        await dbService
+          .collection("hospitals")
+          .doc(hospital.gugun)
+          .update({
+            [region]: firebase.firestore.FieldValue.arrayUnion({
+              ...hospital,
+            }),
+          });
+      }
+    } catch (e) {
+      console.error("잘못되었다");
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
     }
   }, []);
   console.log(hospitals);
@@ -311,7 +345,11 @@ function App() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=2&pageNo=1&resultType=json`;
+=======
+      const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=10&pageNo=1&resultType=json`;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
       const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=10&pageNo=1&resultType=json`;
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
@@ -328,6 +366,7 @@ function App() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             const startIdx = hospital.road_address.indexOf("(") + 1;
             const endIdx =
               hospital.road_address.indexOf("동,") !== -1
@@ -337,6 +376,8 @@ function App() {
               hospital.road_address.slice(startIdx, endIdx) || "도로명";
             getImgFromNaverMap({ area, ...hospital });
 =======
+=======
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
@@ -366,6 +407,9 @@ function App() {
               });
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
