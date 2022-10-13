@@ -34,7 +34,20 @@ const Main = () => {
 export default Main;
 
 const Container = styled.main`
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+  overflow: hidden;
   position: relative;
+=======
+  /* overflow-x: hidden; */
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  /* overflow-x: hidden; */
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  /* overflow-x: hidden; */
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   background: ${theme("beige")};
 `;
 
@@ -43,7 +56,6 @@ const Row = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
   width: 120rem;
-  height: 100%;
   margin: 0 auto;
   padding: 15rem 0;
 
@@ -70,6 +82,7 @@ const TextCon = styled.div`
     top: 0;
     left: 11%;
     width: 100%;
+    margin: 0;
     height: 1px;
     background: ${theme("grayGradient")};
     display: block;
@@ -77,6 +90,7 @@ const TextCon = styled.div`
 
   ${media.xs`
   width : 100%;
+  margin : 0;
   padding : 0 10%;
   &::before {
     width : 80%;
@@ -127,11 +141,9 @@ const ImgCon = styled.div`
   text-align: right;
   ${media.xs`
   width : 100%;
-  padding : 0 10%;
-  
-  ${media.xs`
+  margin : 0;
   margin-top : 10%;
-  `}
+  padding : 0 10%;
   `}
 `;
 const Img = styled.img`

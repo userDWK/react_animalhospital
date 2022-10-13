@@ -321,10 +321,19 @@ const FootBox = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin: 6rem 0;
+  margin: 6rem auto;
   padding: 2rem 1rem;
-  /* border-top: solid 1px ${theme("gray")}; */
   text-align: center;
+  width : 40rem;
+
+  ${media.sm`
+  justify-content : space-between;
+  `}
+
+  ${media.xxs`
+  flex-direction : column;
+  `}
+
 `;
 
 const HelpCon = styled.div`
@@ -348,7 +357,12 @@ const HelpCon = styled.div`
   ${media.xs`
   display : flex;
   justify-content : space-around;
-  width : 100%;
+  flex-direction : column;
+  `}
+
+  
+  ${media.xxs`
+  margin-top : 3rem;
   `}
 `;
 const CreateCon = styled.div`
@@ -367,10 +381,18 @@ const SearchCon = styled.div`
 
 const SocialCon = styled.div`
   display: flex;
-  ${media.xs`
-  width : 100%;
+  
+  ${media.sm`
+  width : 25rem;
   flex-direction : column;
   `}
+
+  ${media.xxs`
+  flex-direction : column;
+  width : 40rem;
+  margin-top : 2rem;
+  `}
+
 `;
 const Google = styled.button`
   position: relative;
@@ -397,8 +419,12 @@ const Google = styled.button`
     color: ${theme("red")};
   }
 
-  ${media.xs`
-  margin : 1rem 0;
+  ${media.sm`
+  margin : 0.5rem 0;
+  `}
+
+  ${media.xxs`
+  width : 100%;
   `}
 `;
 const GitHub = styled(Google)`

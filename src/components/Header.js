@@ -147,6 +147,19 @@ const Header = () => {
 export default Header;
 
 const Container = styled.header`
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+  position: relative;
+=======
+  overflow-x: hidden;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  overflow-x: hidden;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  overflow-x: hidden;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   background: ${theme("beige")};
 `;
 const Row = styled.div`
@@ -155,19 +168,42 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 120rem;
+  height: 100%;
   margin: 0 auto;
   padding: 3rem 5rem;
 
   ${media.xs`
   align-items: baseline;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+  justify-content: space-between;
+=======
+  justify-content: center;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  justify-content: center;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+  justify-content: center;
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
         position : relative;
         width : 100%;
-        height : 20rem;
+        height : 14rem;
+        margin : 0;
         `}
 
   ${media.xl`
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   width : 100%;
-  padding : 3rem 5rem;
+=======
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
+=======
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   margin : 0;
   `}
 `;
@@ -202,8 +238,12 @@ const SearchBox = styled.form`
         position : absolute;
         justify-content : center;
         left : 0;
-        bottom  : 0%;
+        bottom  : -25%;
         width : 100%;
+        `}
+
+        ${media.xxs`
+        bottom  : -50%;
         `}
 `;
 const SearchText = styled.input`
