@@ -37,8 +37,12 @@ const Container = styled.main`
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   overflow: hidden;
   position: relative;
+=======
+  /* overflow-x: hidden; */
+>>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
 =======
   /* overflow-x: hidden; */
 >>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
