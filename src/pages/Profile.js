@@ -139,6 +139,7 @@ const Container = styled.div`
   background: ghostwhite;
 `;
 const Row = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-around;
   width: 120rem;
@@ -149,7 +150,8 @@ const Row = styled.div`
   `}
 
   ${media.xl`
-  width : 100%;
+  width : 100%; 
+  margin : 0;
   `}
 `;
 
