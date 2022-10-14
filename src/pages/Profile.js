@@ -135,7 +135,6 @@ const Container = styled.div`
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
-  /* background: rgba(200, 240, 210, 0.9); */
   background: ghostwhite;
 `;
 const Row = styled.div`

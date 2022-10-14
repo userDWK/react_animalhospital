@@ -14,7 +14,7 @@ const item = [
   { label: "login", className: "list", id: "login", href: "/login" },
 ];
 
-const Header = () => {
+const Header = ({ hospitals }) => {
   const [isSearch, setIsSearch] = useState(false);
   const [text, setText] = useState("");
   const [isModal, setIsModal] = useState(false);
@@ -31,6 +31,13 @@ const Header = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    if (Object.keys(hospitals).includes(text)) {
+      return;
+    } else {
+      if (Object.keys(Object.values(hospitals)).includes(text)) {
+        return;
+      }
+    }
     setText("");
   };
 
@@ -147,25 +154,11 @@ const Header = () => {
 export default Header;
 
 const Container = styled.header`
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   position: relative;
-=======
   overflow-x: hidden;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  overflow-x: hidden;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  overflow-x: hidden;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  overflow-x: hidden;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   background: ${theme("beige")};
 `;
+
 const Row = styled.div`
   position: relative;
   display: flex;
@@ -178,23 +171,7 @@ const Row = styled.div`
 
   ${media.xs`
   align-items: baseline;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   justify-content: space-between;
-=======
-  justify-content: center;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  justify-content: center;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  justify-content: center;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
-  justify-content: center;
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
         position : relative;
         width : 100%;
         height : 14rem;
@@ -202,19 +179,7 @@ const Row = styled.div`
         `}
 
   ${media.xl`
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   width : 100%;
-=======
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
-=======
->>>>>>> 12d508227df1d36c1a944e5b8412fdd3db036a61
   margin : 0;
   `}
 `;

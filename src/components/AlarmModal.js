@@ -39,20 +39,20 @@ const AlarmModal = ({ setIsModal, ...rest }) => {
 export default AlarmModal;
 
 const ModalCon = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.8);
   z-index: 10;
 `;
 
 const ModalBox = styled.div`
-  position: absolute;
-  top: 15%;
+  position: fixed;
+  top: 5%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   width: 45rem;
   min-height: 15rem;
   padding: 0 0 10rem;

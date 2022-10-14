@@ -3,14 +3,10 @@ import { media, theme } from "../../assets/style/styleUtil";
 import Masonry from "react-masonry-component";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { dbService } from "../../fbase";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import basicProfile from "../../sources/images/app.jpg";
 import { useNavigate } from "react-router-dom/dist";
-import { useDispatch } from "react-redux";
-import { setSelect } from "../../redux/feature/storageSlice";
 
-const region = [
+const district = [
   "해운대구",
   "수영구",
   "동래구",
@@ -29,69 +25,66 @@ const region = [
   "영도구",
 ];
 
-const View = () => {
-  const [hospitals, setHospitals] = useState([]);
-  const [selectHospital, setSelectHospital] = useState({});
+const View = ({ hospitals }) => {
+  const [displayDistrictData, setDisplayDistrictData] = useState({});
   const location = useLocation().pathname.slice(6);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const masonryOptions = {
     itemSelector: ".gridItem",
   };
 
-  //location에 해당하는 병원 정보 요청하여 setState.
+  //props로 전달받은 hospitals에서
   const getDisplayData = useCallback(async () => {
     let data = [];
+
     if (location) {
-      const docRef = doc(dbService, "hospitals", location);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        Object.keys(docSnap.data()).forEach((key) => {
-          data = [...data, ...docSnap.data()[key]];
-        });
-      } else {
-        data = [];
-      }
+      data = hospitals[location];
     } else {
-      const querySnapshot = await getDocs(collection(dbService, "hospitals"));
-      querySnapshot.forEach((doc) => {
-        Object.keys(doc.data()).forEach((key) => {
-          data = [...data, ...doc.data()[key]];
+      Object.values(hospitals).forEach((area) => {
+        const mergeData = Object.values(area).filter((hospital) => {
+          console.log(Object.keys(area)).join("");
+          const areaName = Object.keys(area).join("");
+          const a = Object.keys(data).includes(areaName);
+          !a && (data = [...data, { [areaName]: hospital }]);
+          return a;
         });
+        data = [...data, ...mergeData];
+        console.log(data);
       });
     }
-    setHospitals(data);
-  }, [location]);
+    setDisplayDistrictData(data);
+  }, [location, hospitals]);
 
   const getSelectHospitalInfo = (e) => {
     e.preventDefault();
-    hospitals.forEach((hospital) => {
-      if (hospital.tel === e.currentTarget.id) {
-        dispatch(setSelect(hospital));
-        navigate(`hospital?query=${hospital.animal_hospital}`);
-      }
+
+    const [area, tel] = e.target.id.split("_");
+
+    const hospital = hospitals[location][area].filter((hos) => {
+      return hos.tel === tel;
     });
+    navigate(`hospital?query=${hospital.animal_hospital}`);
   };
-  console.log(1);
+
   useEffect(() => {
     getDisplayData();
   }, [location, getDisplayData]);
   return (
     <Container className="main">
       <Row>
-        <RegionBox className="region">
-          <Region>
+        <DistrictBox className="district">
+          <District>
             <Link to="">전체</Link>
-          </Region>
-          {region.sort().map((gu) => {
+          </District>
+          {district.sort().map((gu) => {
             return (
-              <Region key={gu}>
+              <District key={gu}>
                 <Link to={`${gu}`}>{gu}</Link>
-              </Region>
+              </District>
             );
           })}
-        </RegionBox>
+        </DistrictBox>
         <MasonryBox>
           <Masonry
             className={"masonry"} // default ''
@@ -101,26 +94,28 @@ const View = () => {
             updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
             // imagesLoadedOptions={imagesLoadedOptions} // default {}
           >
-            {hospitals.map((hospital) => {
-              return (
-                <Item
-                  key={hospital.tel}
-                  id={hospital.tel}
-                  className="gridItem"
-                  onClick={getSelectHospitalInfo}
-                >
-                  <ImgBox>
-                    <ThumImg
-                      src={hospital.thumUrl ? hospital.thumUrl : basicProfile}
-                      alt=""
-                    />
-                  </ImgBox>
-                  <TextBox>
-                    <HospitalName>{hospital.animal_hospital}</HospitalName>
-                    <HospitalAdd>{hospital.road_address}</HospitalAdd>
-                  </TextBox>
-                </Item>
-              );
+            {Object.values(displayDistrictData)?.map((area) => {
+              return area.map((hospital) => {
+                return (
+                  <Item
+                    key={hospital.tel}
+                    id={`${hospital.area}_hospital.tel`}
+                    className="gridItem"
+                    onClick={getSelectHospitalInfo}
+                  >
+                    <ImgBox>
+                      <ThumImg
+                        src={hospital.thumUrl ? hospital.thumUrl : basicProfile}
+                        alt=""
+                      />
+                    </ImgBox>
+                    <TextBox>
+                      <HospitalName>{hospital.animal_hospital}</HospitalName>
+                      <HospitalAdd>{hospital.road_address}</HospitalAdd>
+                    </TextBox>
+                  </Item>
+                );
+              });
             })}
           </Masonry>
         </MasonryBox>
@@ -166,7 +161,7 @@ const MasonryBox = styled.div`
   width: 100%;
 `;
 
-const RegionBox = styled.div`
+const DistrictBox = styled.div`
   position: sticky;
   top: 10%;
   margin-left: 2rem;
@@ -181,7 +176,7 @@ const RegionBox = styled.div`
   }
 `;
 
-const Region = styled.div`
+const District = styled.div`
   position: relative;
   font-size: 2rem;
 
@@ -220,7 +215,7 @@ const Region = styled.div`
 `;
 
 const Item = styled.li`
-  width: 30%;
+  width: 31%;
   padding: 0 0 2rem 2rem;
   box-sizing: content-box;
   cursor: pointer;
