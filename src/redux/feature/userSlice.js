@@ -13,8 +13,11 @@ const userSlice = createSlice({
     setUid: (state, action) => {
       state.uid = action.payload;
     },
+    updateUser: (state, action) => {
+      state.info = { ...state.info, ...action.payload };
+    },
   },
 });
 
 export default userSlice;
-export const { setUser, setIsLoggedIn, setUid } = userSlice.actions;
+export const { setUser, setIsLoggedIn, setUid, updateUser } = userSlice.actions;

@@ -4,7 +4,7 @@ import AuthInput from "../components/auth/AuthInput";
 import { media, shadow, theme } from "../assets/style/styleUtil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { authService, dbService } from "../fbase";
 import FindModal from "../components/auth/InputModal";
 import firebase from "firebase/compat/app";
@@ -145,7 +145,7 @@ const Login = () => {
   };
 
   const socialLogin = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
       let user = {};
       if (e.target.closest("#google")) {
@@ -225,7 +225,7 @@ const Login = () => {
           <FootBox>
             <HelpCon>
               <CreateCon>
-                <a href="/create">회원 가입</a>
+                <Link to="/create">회원 가입</Link>
               </CreateCon>
               <SearchCon>
                 <button
@@ -258,7 +258,7 @@ const Login = () => {
 export default Login;
 
 const Container = styled.div`
-  min-height: 80rem;
+  min-height: 85rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
@@ -324,7 +324,7 @@ const FootBox = styled.div`
   margin: 6rem auto;
   padding: 2rem 1rem;
   text-align: center;
-  width : 40rem;
+  width: 40rem;
 
   ${media.sm`
   justify-content : space-between;
@@ -333,7 +333,6 @@ const FootBox = styled.div`
   ${media.xxs`
   flex-direction : column;
   `}
-
 `;
 
 const HelpCon = styled.div`
@@ -360,7 +359,6 @@ const HelpCon = styled.div`
   flex-direction : column;
   `}
 
-  
   ${media.xxs`
   margin-top : 3rem;
   `}
@@ -381,7 +379,7 @@ const SearchCon = styled.div`
 
 const SocialCon = styled.div`
   display: flex;
-  
+
   ${media.sm`
   width : 25rem;
   flex-direction : column;
@@ -392,7 +390,6 @@ const SocialCon = styled.div`
   width : 40rem;
   margin-top : 2rem;
   `}
-
 `;
 const Google = styled.button`
   position: relative;

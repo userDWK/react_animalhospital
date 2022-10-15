@@ -3,8 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 import MainImg from "../sources/images/main.jpg";
 import { media, theme } from "../assets/style/styleUtil";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
+  const navigate = useNavigate();
+  const moveViewPage = (e) => {
+    e.preventDefault();
+    navigate("/view");
+  };
   return (
     <>
       <Container>
@@ -17,7 +23,7 @@ const Main = () => {
               <br />
               보호자의 신속하고 정확한 판단입니다.
             </Desc>
-            <Search>
+            <Search onClick={moveViewPage}>
               병원 찾기
               <FontAwesomeIcon icon={faArrowRight} />
             </Search>
@@ -36,7 +42,6 @@ export default Main;
 const Container = styled.main`
   overflow: hidden;
   position: relative;
-  overflow-x: hidden;
   background: ${theme("beige")};
 `;
 
@@ -46,7 +51,7 @@ const Row = styled.div`
   flex-wrap: wrap;
   width: 120rem;
   margin: 0 auto;
-  padding: 15rem 0;
+  padding: 22rem 0;
 
   ${media.xs`
   flex-direction : column;

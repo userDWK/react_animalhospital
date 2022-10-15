@@ -45,10 +45,11 @@ function App() {
 
   //naver map api 전화번호로 query하여 thum img 추출한 후, spread 문법으로 hospital 객체와 병합.
   const getImgFromNaverMap = useCallback((hospitalArr) => {
+    console.log(hospitalArr);
     let finalHospitals = null;
     try {
       hospitalArr.map(async (hospital) => {
-        const url = `naver/v5/api/search?caller=pcweb&query=${hospital.tel}&type=all&page=1&displayCount=1&isPlaceRecommendationReplace=true&lang=ko`;
+        const url = `/naver/v5/api/search?query=${hospital.tel}&type=all&page=1&displayCount=1&isPlaceRecommendationReplace=true&lang=ko`;
         await axios
           .get(url, {
             headers: {
@@ -61,6 +62,7 @@ function App() {
           })
           .then((res) => {
             const info = res?.data?.result?.place?.list[0];
+            // console.log(info);
             const hos = {
               ...hospital,
               thumUrl: info?.thumUrl,
@@ -111,10 +113,9 @@ function App() {
 
   // 공공api 부산 동물 병원 정보 get 요청 및 area 추출.
   const RequestToGetHospitalData = useCallback(async () => {
-    let hospitalArr = null;
+    let hospitalArr = {};
     try {
-      const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=50&pageNo=1&resultType=json`;
-
+      const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=7&pageNo=1&resultType=json`;
       await axios.get(url).then((res) => {
         hospitalArr = res.data.getTblAnimalHospital.body.items.item.map(
           (hospital) => {
@@ -148,7 +149,7 @@ function App() {
     <>
       <Header hospitals={hospitals} />
       <Routes>
-        {/* <Route path="/react_animalhospital" element={<Main />} /> */}
+        <Route path="/react_animalhospital/*" element={<Main />} />
         <Route path="/*" element={<Main />} />
         <Route path="login" element={<Auth />} />
         <Route path="create" element={<Auth />} />

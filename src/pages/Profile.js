@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { media, shadow } from "../assets/style/styleUtil";
-import FindModal from "../components/auth/InputModal";
+import InputModal from "../components/auth/InputModal";
 import { dbService } from "../fbase";
+import { setUser, updateUser } from "../redux/feature/userSlice";
 
 const modifyProps = [
   {
@@ -38,7 +39,8 @@ const Profile = () => {
   const [nick, setNick] = useState("");
   const [phone, setPhone] = useState("");
   const [isModal, setIsModal] = useState(false);
-  const displayUser = [email, nick, phone];
+  const dispatch = useDispatch();
+  const displayUser = [user?.email, user?.nick, user?.phone];
 
   const handleInfo = (e) => {
     const {
@@ -52,8 +54,9 @@ const Profile = () => {
     }
   };
 
-  const changeData = async (e) => {
+  const updateUserInfo = async (e) => {
     e.preventDefault();
+    dispatch(updateUser({ nick, phone }));
     try {
       await dbService.collection("users").doc(user.uid).update({
         phone,
@@ -75,11 +78,11 @@ const Profile = () => {
 
   return (
     <Container>
-      {isModal && nick && phone && (
-        <FindModal
+      {isModal && (
+        <InputModal
           onClick={() => setIsModal(false)}
           handleInfo={handleInfo}
-          changeData={changeData}
+          updateUserInfo={updateUserInfo}
           setIsModal={setIsModal}
           modifyProps={modifyProps}
           nick={nick}
@@ -95,18 +98,12 @@ const Profile = () => {
             const text = ["email", "nick", "phone"];
             return (
               <InfoBox key={text[idx]}>
-                <Text>{`${text[idx]} : `}</Text>
+                <Text>{`${text[idx]} `}</Text>
                 <Info>{data}</Info>
               </InfoBox>
             );
           })}
-          <ModifyBtn
-            onClick={() => {
-              setIsModal(true);
-            }}
-          >
-            on modify
-          </ModifyBtn>
+          <ModifyBtn onClick={() => setIsModal(true)}>on modify</ModifyBtn>
         </Left>
         <Right>
           <Title>hospitals of interest</Title>
@@ -131,11 +128,12 @@ export default Profile;
 
 const Container = styled.div`
   position: relative;
-  min-height: 80rem;
+  min-height: 85rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
   background: ghostwhite;
+  overflow: hidden;
 `;
 const Row = styled.div`
   position: relative;

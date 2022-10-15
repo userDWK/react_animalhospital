@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { shadow, theme } from "../../assets/style/styleUtil";
+import { media, shadow, theme } from "../../assets/style/styleUtil";
 
 const AuthInput = ({ ...rest }) => {
   return (
@@ -17,6 +17,10 @@ const InputBox = styled.div`
   flex-direction: column;
   width: 40rem;
   margin: 5rem auto;
+
+  /* ${media.xs`
+  width : 70%;
+  `} */
 `;
 const Label = styled.label`
   padding: 0 0 0.5rem 0.5rem;
@@ -24,6 +28,10 @@ const Label = styled.label`
   font-size: 1.5rem;
   text-align: left;
   font-weight: 600;
+
+  ${media.xs`
+  font-size : 2.5rem;
+  `}
 `;
 const Input = styled.input`
   padding: 1rem 0 1rem 1rem;
@@ -35,4 +43,8 @@ const Input = styled.input`
     ${shadow(2)};
     outline: none;
   }
+
+  ${media.xs`
+  padding : 1.5rem 0 1.5rem 1.5rem;
+  `}
 `;

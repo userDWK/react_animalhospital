@@ -170,6 +170,7 @@ const Item = styled.li`
 const Title = styled.p`
   font-size: 1.75rem;
   margin-bottom: 1rem;
+  font-weight: bolder;
 `;
 
 const LoGoColumn = styled.div``;

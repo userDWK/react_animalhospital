@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { theme } from "../../assets/style/styleUtil";
+import { media, theme } from "../../assets/style/styleUtil";
 import { authService } from "../../fbase";
 import AuthInput from "./AuthInput";
 
-const FindModal = ({
+const InputModal = ({
   email,
   setEmail,
   setIsModal,
@@ -15,12 +15,12 @@ const FindModal = ({
   setPhone,
   modifyProps,
   handleInfo,
-  changeData,
+  updateUserInfo,
   ...rest
 }) => {
   const location = useLocation().pathname.slice(1);
 
-  const sendEmail = async (e) => {
+  const sendResetEmail = async (e) => {
     e.preventDefault();
     try {
       await authService.sendPasswordResetEmail(email);
@@ -48,13 +48,13 @@ const FindModal = ({
                 onChange={handleData}
               />
               <BtnBox>
-                <SubmitBtn onClick={sendEmail}>이메일 전송</SubmitBtn>
+                <SubmitBtn onClick={sendResetEmail}>이메일 전송</SubmitBtn>
                 <CancelBtn onClick={rest.onClick}>닫기</CancelBtn>
               </BtnBox>
             </>
           ) : (
             <>
-              <Form onSubmit={changeData}>
+              <Form onSubmit={updateUserInfo}>
                 {modifyProps.map((data, idx) => {
                   const value = [nick, phone];
                   return (
@@ -81,26 +81,33 @@ const FindModal = ({
   );
 };
 
-export default FindModal;
+export default InputModal;
 
 const ModalCon = styled.div`
-  position: absolute;
-  top: -100%;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 300%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.8);
   z-index: 10;
 `;
 
 const ModalBox = styled.div`
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60rem;
   padding: 0 0 7rem;
   background: ${theme("lightgray")};
+
+  ${media.xs`
+  top : 30%;
+  width : 80%;
+  min-height : 30rem;
+  max-height : 50rem;
+  `}
 `;
 
 const BtnBox = styled.div`
@@ -108,6 +115,11 @@ const BtnBox = styled.div`
   bottom: 2.5rem;
   right: 2rem;
   display: flex;
+
+  ${media.xs`
+  bottom : 3.5rem;
+  right : 3.5rem;
+  `}
 `;
 const SubmitBtn = styled.button`
   margin-right: 1rem;
@@ -124,6 +136,11 @@ const SubmitBtn = styled.button`
   &:active {
     box-shadow: 0.2rem 0.2rem 0.2rem gray;
   }
+
+  ${media.xs`
+  margin-right : 2rem;
+  font-size : 2.5rem;
+  `}
 `;
 
 const CancelBtn = styled(SubmitBtn)`
@@ -133,4 +150,9 @@ const CancelBtn = styled(SubmitBtn)`
   }
 `;
 
-const Form = styled.form``;
+const Form = styled.form`
+  width: 100%;
+  height: 100%;
+  ${media.xs`
+  `}
+`;

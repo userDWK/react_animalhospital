@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { media, shadow, theme } from "../assets/style/styleUtil";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,12 +14,13 @@ const item = [
   { label: "login", className: "list", id: "login", href: "/login" },
 ];
 
-const Header = ({ hospitals }) => {
+const Header = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [text, setText] = useState("");
   const [isModal, setIsModal] = useState(false);
   const loggedIn = useSelector((state) => state.userData.loggedIn);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const searchHover = (e) => {
     setIsSearch((prev) => !prev);
@@ -29,15 +30,9 @@ const Header = ({ hospitals }) => {
     setText(e.target.value);
   };
 
-  const handleSearch = (e) => {
+  const handleQuery = (e) => {
     e.preventDefault();
-    if (Object.keys(hospitals).includes(text)) {
-      return;
-    } else {
-      if (Object.keys(Object.values(hospitals)).includes(text)) {
-        return;
-      }
-    }
+    navigate(`/view?query=${text}`);
     setText("");
   };
 
@@ -80,10 +75,6 @@ const Header = ({ hospitals }) => {
     });
   }, []);
 
-  useEffect(() => {
-    listEvent();
-  }, [listEvent]);
-
   const checkLoggedIn = (e) => {
     if (!loggedIn) {
       e.preventDefault();
@@ -98,18 +89,23 @@ const Header = ({ hospitals }) => {
       setIsModal(true);
     }
   };
+
+  useEffect(() => {
+    listEvent();
+  }, [listEvent]);
+
   return (
     <Container>
       {isModal && <AlarmModal setIsModal={setIsModal} />}
       <Row>
         <LoGo>
           <NavLink to="/">
-            PET
+            ANIMAL
             <br /> HOSPITAL
           </NavLink>
         </LoGo>
 
-        <SearchBox onSubmit={handleSearch} view={isSearch}>
+        <SearchBox onSubmit={handleQuery} view={isSearch}>
           <SearchText
             type="text"
             value={text}
@@ -174,7 +170,7 @@ const Row = styled.div`
   justify-content: space-between;
         position : relative;
         width : 100%;
-        height : 14rem;
+        height : 18rem;
         margin : 0;
         `}
 
@@ -214,12 +210,8 @@ const SearchBox = styled.form`
         position : absolute;
         justify-content : center;
         left : 0;
-        bottom  : -25%;
+        bottom  : 10%;
         width : 100%;
-        `}
-
-        ${media.xxs`
-        bottom  : -50%;
         `}
 `;
 const SearchText = styled.input`
