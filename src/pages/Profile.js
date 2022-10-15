@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { media, shadow } from "../assets/style/styleUtil";
 import InputModal from "../components/auth/InputModal";
+import MasonryLayout from "../components/MasonryLayout";
 import { dbService } from "../fbase";
 import { setUser, updateUser } from "../redux/feature/userSlice";
 
@@ -27,18 +28,16 @@ const modifyProps = [
   },
 ];
 
-const Profile = () => {
+const Profile = ({ hospitals }) => {
   const user = useSelector((state) => {
     return state.userData.info;
-  });
-  const interest = useSelector((state) => {
-    return state.interestData.Hospitals;
   });
 
   const [email, setEmail] = useState("");
   const [nick, setNick] = useState("");
   const [phone, setPhone] = useState("");
   const [isModal, setIsModal] = useState(false);
+  const [displayItems, setDisplayItems] = useState(null);
   const dispatch = useDispatch();
   const displayUser = [user?.email, user?.nick, user?.phone];
 
@@ -68,13 +67,20 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
+  const getProfileInfo = useCallback(() => {
     if (user) {
       setEmail(user.email);
       setNick(user.nick);
       setPhone(user.phone);
     }
+    const interestData = JSON.parse(localStorage.getItem("INTEREST_HOSPITAL"));
+    setDisplayItems(interestData);
+    console.log(interestData);
   }, [user]);
+
+  useEffect(() => {
+    getProfileInfo();
+  }, [getProfileInfo]);
 
   return (
     <Container>
@@ -107,17 +113,9 @@ const Profile = () => {
         </Left>
         <Right>
           <Title>hospitals of interest</Title>
-          {interest &&
-            interest.map((hospital, idx) => {
-              return (
-                <HospitalBox key={hospital + idx}>
-                  <TextBox>
-                    <Hospital></Hospital>
-                    <Address></Address>
-                  </TextBox>
-                </HospitalBox>
-              );
-            })}
+          {displayItems && (
+            <MasonryLayout displayItems={displayItems} hospitals={hospitals} />
+          )}
         </Right>
       </Row>
     </Container>

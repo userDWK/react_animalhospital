@@ -153,7 +153,7 @@ function App() {
         <Route path="/*" element={<Main />} />
         <Route path="login" element={<Auth />} />
         <Route path="create" element={<Auth />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="profile" element={<Profile hospitals={hospitals} />} />
         <Route path="view/*" element={<View hospitals={hospitals} />} />
       </Routes>
       <Footer />

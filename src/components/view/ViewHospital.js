@@ -39,9 +39,14 @@ const ViewHospital = () => {
   };
 
   const addDataToStorage = (e) => {
-    console.log(e);
-    // e.stopPropagation();
-    localStorage.setItem("INTEREST_HOSPITAL", JSON.stringify(hospital));
+    let data = JSON.parse(localStorage.getItem("INTEREST_HOSPITAL"));
+    if (data && Object?.keys(data)?.includes(hospital.area)) {
+      !Object.values(...data[hospital.area])?.includes(hospital.tel) &&
+        (data[hospital.area] = [...data[hospital.area], hospital]);
+    } else {
+      data = { ...data, [hospital.area]: [hospital] };
+    }
+    localStorage.setItem("INTEREST_HOSPITAL", JSON.stringify(data));
   };
 
   useEffect(() => {

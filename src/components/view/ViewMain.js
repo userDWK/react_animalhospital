@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { media, theme } from "../../assets/style/styleUtil";
-import Masonry from "react-masonry-component";
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import basicProfile from "../../sources/images/app.jpg";
-import { useNavigate } from "react-router-dom/dist";
+import MasonryLayout from "../MasonryLayout";
 
 const district = [
   "해운대구",
@@ -26,14 +24,9 @@ const district = [
 ];
 
 const View = ({ hospitals }) => {
-  const [displayData, setDisplayData] = useState({});
+  const [displayItems, setDisplayItems] = useState({});
   const location = useLocation().pathname.slice(6);
   const queryLocation = useLocation().search.slice(1);
-  const navigate = useNavigate();
-
-  const masonryOptions = {
-    itemSelector: ".gridItem",
-  };
 
   const activeStyle = { color: `${theme("green")}`, fontWeight: "bolder" };
 
@@ -82,11 +75,11 @@ const View = ({ hospitals }) => {
         });
       }
     });
-    setDisplayData(hos);
+    setDisplayItems(hos);
   }, [hospitals, queryLocation]);
 
   //props로 전달받은 hospitals에서
-  const getDisplayData = useCallback(() => {
+  const getdisplayItems = useCallback(() => {
     if (!hospitals) return;
     let data = {};
     if (location) {
@@ -107,24 +100,24 @@ const View = ({ hospitals }) => {
         });
       });
     }
-    setDisplayData(data);
+    setDisplayItems(data);
   }, [location, hospitals]);
 
-  const getSelectHospitalInfo = (e) => {
-    e.preventDefault();
+  // const getSelectHospitalInfo = (e) => {
+  //   e.preventDefault();
 
-    const [district, area, tel] = e.currentTarget.id.split("_");
+  //   const [district, area, tel] = e.currentTarget.id.split("_");
 
-    const hospital = hospitals[district][area].filter((hos) => {
-      return hos.tel === tel;
-    });
-    sessionStorage.setItem("SELECT_HOSPITAL", JSON.stringify(hospital[0]));
-    navigate(`hospital?${hospital[0].animal_hospital}`);
-  };
+  //   const hospital = hospitals[district][area].filter((hos) => {
+  //     return hos.tel === tel;
+  //   });
+  //   sessionStorage.setItem("SELECT_HOSPITAL", JSON.stringify(hospital[0]));
+  //   navigate(`hospital?${hospital[0].animal_hospital}`);
+  // };
 
   useEffect(() => {
-    queryLocation.startsWith("query") ? getSearchData() : getDisplayData();
-  }, [location, queryLocation, getDisplayData, getSearchData]);
+    queryLocation.startsWith("query") ? getSearchData() : getdisplayItems();
+  }, [location, queryLocation, getdisplayItems, getSearchData]);
 
   return (
     <Container className="main">
@@ -148,43 +141,8 @@ const View = ({ hospitals }) => {
             );
           })}
         </DistrictBox>
-        {displayData ? (
-          <MasonryBox>
-            <Masonry
-              className={"masonry"} // default ''
-              elementType={"ul"} // default 'div'
-              options={masonryOptions} // default {}
-              disableImagesLoaded={false} // default false
-              updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-              // imagesLoadedOptions={imagesLoadedOptions} // default {}
-            >
-              {Object.values(displayData)?.map((area) => {
-                return area.map((hospital) => {
-                  return (
-                    <Item
-                      key={hospital.tel}
-                      id={`${hospital.gugun}_${hospital.area}_${hospital.tel}`}
-                      className="gridItem"
-                      onClick={getSelectHospitalInfo}
-                    >
-                      <ImgBox>
-                        <ThumImg
-                          src={
-                            hospital.thumUrl ? hospital.thumUrl : basicProfile
-                          }
-                          alt=""
-                        />
-                      </ImgBox>
-                      <TextBox>
-                        <HospitalName>{hospital.animal_hospital}</HospitalName>
-                        <HospitalAdd>{hospital.road_address}</HospitalAdd>
-                      </TextBox>
-                    </Item>
-                  );
-                });
-              })}
-            </Masonry>
-          </MasonryBox>
+        {displayItems ? (
+          <MasonryLayout displayItems={displayItems} hospitals={hospitals} />
         ) : (
           <EmptyDataBox>
             <EmptyText>Not exist search data.</EmptyText>
@@ -226,10 +184,6 @@ const Row = styled.div`
   ${media.lg`
   width : 100%;
   `}
-`;
-
-const MasonryBox = styled.div`
-  width: 100%;
 `;
 
 const DistrictBox = styled.div`
@@ -283,40 +237,6 @@ const District = styled.div`
       text-shadow: 0.55px 0.75px 0.95px ${theme("green")};
     }
   }
-`;
-
-const Item = styled.li`
-  width: 29%;
-  padding: 1rem;
-  box-sizing: content-box;
-  cursor: pointer;
-  border-radius: 1rem;
-
-  &:hover {
-    background: lightcyan;
-    border: solid 1px ${theme("gray")};
-  }
-
-  ${media.md`
-  width : 45%;
-  `}
-`;
-
-const ImgBox = styled.div``;
-const ThumImg = styled.img`
-  width: 100%;
-  border-radius: 1rem;
-`;
-const TextBox = styled.div`
-  margin-top: 0.75rem;
-`;
-const HospitalName = styled.h5`
-  font-size: 2.25rem;
-  font-weight: bold;
-`;
-const HospitalAdd = styled.p`
-  padding-top: 1rem;
-  font-size: 2rem;
 `;
 
 const EmptyDataBox = styled.div`
