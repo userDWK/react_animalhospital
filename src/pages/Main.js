@@ -51,7 +51,7 @@ const Row = styled.div`
   flex-wrap: wrap;
   width: 120rem;
   margin: 0 auto;
-  padding: 22rem 0;
+  padding: 18rem 0;
 
   ${media.xs`
   flex-direction : column;

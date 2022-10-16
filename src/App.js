@@ -12,10 +12,12 @@ import { getDoc } from "firebase/firestore";
 import Profile from "./pages/Profile";
 import axios from "axios";
 import View from "./pages/View";
+import XMLParser from "react-xml-parser";
 
 function App() {
   const dispatch = useDispatch();
   const [hospitals, setHospitals] = useState(null);
+  const [interestCnt, setInterestCnt] = useState(0);
 
   //로그인 상태일 시, 사용자 정보 전역 state dispatch.
   const saveStateFromDbUsers = useCallback(
@@ -45,10 +47,14 @@ function App() {
 
   //naver map api 전화번호로 query하여 thum img 추출한 후, spread 문법으로 hospital 객체와 병합.
   const getImgFromNaverMap = useCallback((hospitalArr) => {
-    console.log(hospitalArr);
     let finalHospitals = null;
+    console.log(hospitalArr);
     try {
       hospitalArr.map(async (hospital) => {
+        axios.defaults.baseURL =
+          process.env.NODE_ENV === "development"
+            ? "https://animalhospital.herokuapp.com/http://localhost:3000/"
+            : "https://animalhospital.herokuapp.com/https://userdwk.github.io/react_animalhospital/";
         const url = `/naver/v5/api/search?query=${hospital.tel}&type=all&page=1&displayCount=1&isPlaceRecommendationReplace=true&lang=ko`;
         await axios
           .get(url, {
@@ -62,13 +68,11 @@ function App() {
           })
           .then((res) => {
             const info = res?.data?.result?.place?.list[0];
-            // console.log(info);
+
             const hos = {
               ...hospital,
               thumUrl: info?.thumUrl,
               bizhourInfo: info?.bizhourInfo,
-              homepage: info?.homepage,
-              // parking :
             };
 
             if (!finalHospitals) {
@@ -113,48 +117,64 @@ function App() {
 
   // 공공api 부산 동물 병원 정보 get 요청 및 area 추출.
   const RequestToGetHospitalData = useCallback(async () => {
-    let hospitalArr = {};
+    let hospitalArr = [];
     try {
-      const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=7&pageNo=1&resultType=json`;
-      await axios.get(url).then((res) => {
-        hospitalArr = res.data.getTblAnimalHospital.body.items.item.map(
-          (hospital) => {
-            //동 데이터 추출.
-            const startIdx = hospital.road_address.indexOf("(") + 1;
-            const endIdx =
-              hospital.road_address.indexOf("동,") !== -1
-                ? hospital.road_address.indexOf("동,") + 1
-                : hospital.road_address.indexOf("동)") + 1;
-            const area =
-              hospital.road_address.slice(startIdx, endIdx) || "도로명";
-            return { area, ...hospital };
-          }
-        );
-      });
+      for (let i = 1; i < 2; i++) {
+        const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=10&pageNo=${i}&resultType=json`;
+        await axios.get(url).then((res) => {
+          const data = res.data.getTblAnimalHospital.body.items.item.map(
+            (hospital) => {
+              //동 데이터 추출.
+              const startIdx = hospital.road_address.indexOf("(") + 1;
+              const endIdx =
+                hospital.road_address.indexOf("동,") !== -1
+                  ? hospital.road_address.indexOf("동,") + 1
+                  : hospital.road_address.indexOf("동)") + 1;
+              const area =
+                hospital.road_address.slice(startIdx, endIdx) || "도로명";
+              return { area, ...hospital };
+            }
+          );
+          hospitalArr = hospitalArr ? [...hospitalArr, ...data] : [...data];
+        });
+      }
     } catch (e) {
       console.error(e);
     }
     return hospitalArr;
   }, []);
 
+  const interestItemCnt = useCallback(() => {
+    const item = JSON.parse(localStorage.getItem("INTEREST_HOSPITAL"));
+    if (!item) return;
+    let cnt = 0;
+    Object.keys(item).forEach((area) => {
+      cnt += item[area].length;
+    });
+    setInterestCnt(cnt);
+  }, [interestCnt]);
+
   useEffect(() => {
     checkAuthChanged();
-    const data = RequestToGetHospitalData();
-    data.then((res) => {
-      getImgFromNaverMap(res);
-    });
+    RequestToGetHospitalData().then((res) => getImgFromNaverMap(res));
+    interestItemCnt();
   }, [checkAuthChanged, getImgFromNaverMap, RequestToGetHospitalData]);
 
   return (
     <>
-      <Header hospitals={hospitals} />
+      <Header interestCnt={interestCnt} />
       <Routes>
         <Route path="/react_animalhospital/*" element={<Main />} />
         <Route path="/*" element={<Main />} />
         <Route path="login" element={<Auth />} />
         <Route path="create" element={<Auth />} />
         <Route path="profile" element={<Profile hospitals={hospitals} />} />
-        <Route path="view/*" element={<View hospitals={hospitals} />} />
+        <Route
+          path="view/*"
+          element={
+            <View hospitals={hospitals} interestItemCnt={interestItemCnt} />
+          }
+        />
       </Routes>
       <Footer />
     </>

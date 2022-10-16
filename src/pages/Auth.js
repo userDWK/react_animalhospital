@@ -258,7 +258,7 @@ const Login = () => {
 export default Login;
 
 const Container = styled.div`
-  min-height: 85rem;
+  min-height: 81rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;

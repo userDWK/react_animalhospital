@@ -5,11 +5,13 @@ import styled from "styled-components";
 import { media, theme } from "../../assets/style/styleUtil";
 import basicProfile from "../../sources/images/app.jpg";
 
-const ViewHospital = () => {
+const ViewHospital = ({ interestItemCnt }) => {
   const [hospital, setHospital] = useState(null);
   const [isModal, setIsModal] = useState(false);
   const mapRef = useRef();
+  const interestRef = useRef();
 
+  //선택한 병원 정보의 lat, lon 정보를 이용하여 naver map에 위치 display.
   const RequestNaverMapApi = useCallback((naver, hospital) => {
     const location = new naver.maps.LatLng(hospital.lat, hospital.lon);
     const mapOptions = {
@@ -27,33 +29,64 @@ const ViewHospital = () => {
     });
   }, []);
 
+  //선택한 병원 정보 sessionstorage에서 객체로 파싱하여 state화.
   const getSelectItemFromSession = useCallback(() => {
     if (!hospital) {
       setHospital(JSON.parse(sessionStorage.getItem("SELECT_HOSPITAL")));
     }
   }, [hospital]);
 
+  //이미지 클릭 시, 확대 modal 생성.
   const expandImg = (e) => {
     e.preventDefault();
     setIsModal(true);
   };
 
+  //중복 필터 처리 후, 관심 병원 정보 localstorage에 JSON 변환하여 관리.
+  //관심 선택 유무에 따라 아이콘에 id 부여 후, css 컨트롤.
   const addDataToStorage = (e) => {
+    e.preventDefault();
+    let existData = false;
     let data = JSON.parse(localStorage.getItem("INTEREST_HOSPITAL"));
-    if (data && Object?.keys(data)?.includes(hospital.area)) {
-      !Object.values(...data[hospital.area])?.includes(hospital.tel) &&
-        (data[hospital.area] = [...data[hospital.area], hospital]);
+    if (data && Object?.keys(data)?.includes(hospital?.area)) {
+      let areaData = [...data[hospital?.area]]?.filter((el) => {
+        el.tel === hospital.tel && (existData = true);
+        return el.tel !== hospital.tel;
+      });
+      !existData && areaData.push(hospital);
+      areaData.length
+        ? (data[hospital.area] = [...areaData])
+        : delete data[hospital.area];
     } else {
       data = { ...data, [hospital.area]: [hospital] };
     }
     localStorage.setItem("INTEREST_HOSPITAL", JSON.stringify(data));
+    interestItemCnt();
+    interestRef.current.id = !interestRef.current.id ? "interestClicked" : "";
   };
+
+  const checkedInterestItem = useCallback(() => {
+    localStorage?.getItem("INTEREST_HOSPITAL") &&
+      JSON.parse(localStorage?.getItem("INTEREST_HOSPITAL"))[
+        hospital.area
+      ]?.forEach((el) => {
+        el.tel === hospital.tel && (interestRef.current.id = "interestClicked");
+      });
+  }, [hospital]);
 
   useEffect(() => {
     const { naver } = window;
     getSelectItemFromSession();
-    hospital && RequestNaverMapApi(naver, hospital);
-  }, [RequestNaverMapApi, getSelectItemFromSession, hospital]);
+    if (hospital) {
+      RequestNaverMapApi(naver, hospital);
+      checkedInterestItem();
+    }
+  }, [
+    RequestNaverMapApi,
+    getSelectItemFromSession,
+    hospital,
+    checkedInterestItem,
+  ]);
 
   return (
     <Container>
@@ -69,7 +102,12 @@ const ViewHospital = () => {
       {hospital && (
         <Row>
           <LeftBox>
-            <FontAwesomeIcon icon={faHeart} onClick={addDataToStorage} />
+            <FontAwesomeIcon
+              icon={faHeart}
+              onClick={addDataToStorage}
+              ref={interestRef}
+              id=""
+            />
             <ImgBox onClick={expandImg}>
               <Img src={hospital.thumUrl || basicProfile} alt="" />
             </ImgBox>
@@ -102,7 +140,9 @@ const ViewHospital = () => {
 
 export default ViewHospital;
 
-const Container = styled.div``;
+const Container = styled.div`
+  min-height: 81rem;
+`;
 
 const ImgModalCon = styled.div`
   position: fixed;
@@ -165,10 +205,17 @@ const LeftBox = styled.div`
     position: absolute;
     right: 10%;
     font-size: 4rem;
-    color: pink;
+    color: #ccc;
     cursor: pointer;
     &:hover {
       color: ${theme("red")};
+    }
+  }
+
+  #interestClicked {
+    color: red;
+    &:hover {
+      color: #ccc;
     }
   }
 

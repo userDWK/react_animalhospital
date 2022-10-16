@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { media, shadow, theme } from "../assets/style/styleUtil";
 import { useDispatch, useSelector } from "react-redux";
 import { authService } from "../fbase";
 import AlarmModal from "./AlarmModal";
 import { setMessage } from "../redux/feature/messageSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 const item = [
   { label: "", className: "line" },
@@ -14,7 +16,7 @@ const item = [
   { label: "login", className: "list", id: "login", href: "/login" },
 ];
 
-const Header = () => {
+const Header = ({ interestCnt }) => {
   const [isSearch, setIsSearch] = useState(false);
   const [text, setText] = useState("");
   const [isModal, setIsModal] = useState(false);
@@ -123,20 +125,27 @@ const Header = () => {
             {item.map((menu, idx) => {
               return (
                 <Item
-                  st={loggedIn && menu.label === "login" && true}
+                  login={loggedIn && menu.label === "login" && true}
                   key={idx}
                   id={menu.id}
                   className={menu.className}
                 >
                   {menu.label !== "login" || !loggedIn ? (
-                    <NavLink
-                      onClick={menu.id === "profile" && checkLoggedIn}
-                      to={menu?.href}
-                    >
-                      {menu.label}
-                    </NavLink>
+                    menu.label !== "profile" && (
+                      <NavLink to={menu?.href}>{menu?.label}</NavLink>
+                    )
                   ) : (
                     <LogOut onClick={handleLogout}>log out</LogOut>
+                  )}
+
+                  {menu.id === "profile" && (
+                    <InterestBox>
+                      <NavLink to={menu?.href} onClick={checkLoggedIn}>
+                        <Cnt>{interestCnt}</Cnt>
+                        <FontAwesomeIcon icon={faMessage} />
+                        {menu.label}
+                      </NavLink>
+                    </InterestBox>
                   )}
                 </Item>
               );
@@ -163,14 +172,14 @@ const Row = styled.div`
   width: 120rem;
   height: 100%;
   margin: 0 auto;
-  padding: 3rem 5rem;
+  padding: 7rem 5rem;
 
   ${media.xs`
-  align-items: baseline;
+  /* align-items: baseline; */
   justify-content: space-between;
         position : relative;
         width : 100%;
-        height : 18rem;
+        height : 28rem;
         margin : 0;
         `}
 
@@ -210,7 +219,7 @@ const SearchBox = styled.form`
         position : absolute;
         justify-content : center;
         left : 0;
-        bottom  : 10%;
+        bottom  : 15%;
         width : 100%;
         `}
 `;
@@ -259,7 +268,8 @@ const List = styled.ul`
   align-items: center;
 `;
 const Item = styled.li`
-  font-size: 1.5rem;
+  position: relative;
+  font-size: 1.75rem;
   margin-right: 2.5rem;
   cursor: pointer;
 
@@ -275,7 +285,9 @@ const Item = styled.li`
     `}
 
   &:hover {
-    font-weight: 600;
+    div {
+      color: ${theme("green")};
+    }
   }
 
   &:last-child {
@@ -283,7 +295,7 @@ const Item = styled.li`
     padding: 1.35rem 0;
 
     ${(props) =>
-      props.st &&
+      props.login &&
       css`
         padding: 0;
       `}
@@ -304,8 +316,30 @@ const Item = styled.li`
     }
   }
 `;
+
+const InterestBox = styled.div`
+  position: relative;
+  a {
+    svg {
+      position: absolute;
+      top: -70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3.5rem;
+    }
+  }
+`;
+
+const Cnt = styled.span`
+  position: absolute;
+  top: -88%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+`;
+
 const Button = styled.button`
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   border: none;
   border-radius: 0.5rem;
   background: transparent;
@@ -314,7 +348,6 @@ const Button = styled.button`
 
   &:hover {
     color: ${theme("red")};
-    font-weight: 600;
   }
 `;
 
@@ -323,11 +356,10 @@ const LogOut = styled.button`
   border-radius: 3rem;
   padding: 1.35rem 2rem;
   background: transparent;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   ${shadow(0)}
   cursor: pointer;
   &:hover {
-    font-weight: 600;
     ${shadow(1)}
     color: ${theme("green")};
   }

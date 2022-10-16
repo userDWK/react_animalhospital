@@ -5,7 +5,7 @@ import { media, shadow } from "../assets/style/styleUtil";
 import InputModal from "../components/auth/InputModal";
 import MasonryLayout from "../components/MasonryLayout";
 import { dbService } from "../fbase";
-import { setUser, updateUser } from "../redux/feature/userSlice";
+import { updateUser } from "../redux/feature/userSlice";
 
 const modifyProps = [
   {
@@ -75,7 +75,6 @@ const Profile = ({ hospitals }) => {
     }
     const interestData = JSON.parse(localStorage.getItem("INTEREST_HOSPITAL"));
     setDisplayItems(interestData);
-    console.log(interestData);
   }, [user]);
 
   useEffect(() => {
@@ -112,7 +111,7 @@ const Profile = ({ hospitals }) => {
           <ModifyBtn onClick={() => setIsModal(true)}>on modify</ModifyBtn>
         </Left>
         <Right>
-          <Title>hospitals of interest</Title>
+          <InterestTitle>hospitals of interest</InterestTitle>
           {displayItems && (
             <MasonryLayout displayItems={displayItems} hospitals={hospitals} />
           )}
@@ -126,7 +125,7 @@ export default Profile;
 
 const Container = styled.div`
   position: relative;
-  min-height: 85rem;
+  min-height: 81rem;
   text-align: center;
   font-family: "Cormorant", serif;
   font-size: 2rem;
@@ -219,7 +218,6 @@ const Right = styled.div`
   }
 `;
 
-const HospitalBox = styled.div``;
-const TextBox = styled.div``;
-const Hospital = styled.h5``;
-const Address = styled.p``;
+const InterestTitle = styled(Title)`
+  margin-bottom: 5rem;
+`;

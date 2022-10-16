@@ -25,99 +25,103 @@ const district = [
 
 const View = ({ hospitals }) => {
   const [displayItems, setDisplayItems] = useState({});
-  const location = useLocation().pathname.slice(6);
-  const queryLocation = useLocation().search.slice(1);
+  const location = useLocation().search;
 
   const activeStyle = { color: `${theme("green")}`, fontWeight: "bolder" };
 
-  const getSearchData = useCallback(() => {
-    if (!hospitals) return;
-    const text = queryLocation.slice(6);
+  const getSearchData = useCallback(
+    (text) => {
+      if (!hospitals) return;
 
-    let hos = null;
-    Object.keys(hospitals).forEach((district) => {
-      if (district.indexOf(text) !== -1) {
-        Object.values(hospitals[district]).forEach((area) => {
-          hos = hos
-            ? {
-                [text]: [...Object.values(hos[text]), ...Object.values(area)],
-              }
-            : {
-                [text]: [...Object.values(area)],
-              };
-        });
-      } else {
-        Object.keys(hospitals[district]).forEach((area) => {
-          if (area.indexOf(text) !== -1) {
+      let hos = null;
+      Object.keys(hospitals).forEach((district) => {
+        if (district.indexOf(text) !== -1) {
+          Object.values(hospitals[district]).forEach((area) => {
             hos = hos
               ? {
-                  [text]: [
-                    ...Object.values(hos[text]),
-                    ...Object.values(hospitals[district][area]),
-                  ],
+                  [text]: [...Object.values(hos[text]), ...Object.values(area)],
                 }
               : {
-                  [text]: [...Object.values(hospitals[district][area])],
+                  [text]: [...Object.values(area)],
                 };
-          } else {
-            hospitals[district][area].forEach((item) => {
-              if (Object.values(item).join("_").indexOf(text) !== -1) {
-                hos = hos
-                  ? {
-                      [text]: [...Object.values(hos[text]), item],
-                    }
-                  : {
-                      [text]: [item],
-                    };
-              }
-            });
-          }
-        });
-      }
-    });
-    setDisplayItems(hos);
-  }, [hospitals, queryLocation]);
+          });
+        } else {
+          Object.keys(hospitals[district]).forEach((area) => {
+            if (area.indexOf(text) !== -1) {
+              hos = hos
+                ? {
+                    [text]: [
+                      ...Object.values(hos[text]),
+                      ...Object.values(hospitals[district][area]),
+                    ],
+                  }
+                : {
+                    [text]: [...Object.values(hospitals[district][area])],
+                  };
+            } else {
+              hospitals[district][area].forEach((item) => {
+                if (Object.values(item).join("_").indexOf(text) !== -1) {
+                  hos = hos
+                    ? {
+                        [text]: [...Object.values(hos[text]), item],
+                      }
+                    : {
+                        [text]: [item],
+                      };
+                }
+              });
+            }
+          });
+        }
+      });
+      setDisplayItems(hos);
+    },
+    [hospitals]
+  );
 
   //props로 전달받은 hospitals에서
-  const getdisplayItems = useCallback(() => {
-    if (!hospitals) return;
-    let data = {};
-    if (location) {
-      data = hospitals[location];
-    } else {
-      Object.values(hospitals).forEach((area) => {
-        Object.values(area).forEach((hospital) => {
-          if (data[hospital[0].area]) {
-            data = {
-              ...data,
-              [data[hospital[0].area]]: {
-                ...data[(hospital[0].area, hospital)],
-              },
-            };
-          } else {
-            data = { ...data, [hospital[0].area]: hospital };
-          }
+  const getDisplayItems = useCallback(
+    (text) => {
+      if (!hospitals) return;
+      let data = {};
+
+      if (text) {
+        data = hospitals[text];
+      } else {
+        Object.values(hospitals).forEach((area) => {
+          Object.values(area).forEach((hospital) => {
+            if (data[hospital[0].area]) {
+              data = {
+                ...data,
+                [data[hospital[0].area]]: {
+                  ...data[(hospital[0].area, hospital)],
+                },
+              };
+            } else {
+              data = { ...data, [hospital[0].area]: hospital };
+            }
+          });
         });
-      });
+      }
+      setDisplayItems(data);
+    },
+    [hospitals]
+  );
+
+  const getQueryString = useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    let text = params.get("query");
+    if (text === null) {
+      text = params.get("location");
+      getDisplayItems(text);
+    } else {
+      getSearchData(text);
     }
-    setDisplayItems(data);
-  }, [location, hospitals]);
-
-  // const getSelectHospitalInfo = (e) => {
-  //   e.preventDefault();
-
-  //   const [district, area, tel] = e.currentTarget.id.split("_");
-
-  //   const hospital = hospitals[district][area].filter((hos) => {
-  //     return hos.tel === tel;
-  //   });
-  //   sessionStorage.setItem("SELECT_HOSPITAL", JSON.stringify(hospital[0]));
-  //   navigate(`hospital?${hospital[0].animal_hospital}`);
-  // };
+  }, [getDisplayItems, getSearchData]);
 
   useEffect(() => {
-    queryLocation.startsWith("query") ? getSearchData() : getdisplayItems();
-  }, [location, queryLocation, getdisplayItems, getSearchData]);
+    getQueryString();
+  }, [location, getQueryString, getDisplayItems, getSearchData]);
 
   return (
     <Container className="main">
@@ -132,8 +136,14 @@ const View = ({ hospitals }) => {
             return (
               <District key={gu}>
                 <NavLink
-                  to={`${gu}`}
-                  style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                  style={() => {
+                    const params = new URLSearchParams(window.location.search);
+                    let text = params.get("location");
+                    if (text === gu) {
+                      return activeStyle;
+                    }
+                  }}
+                  to={`/view?location=${gu}`}
                 >
                   {gu}
                 </NavLink>

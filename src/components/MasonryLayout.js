@@ -32,7 +32,7 @@ const MasonryLayout = ({ displayItems, hospitals }) => {
         // imagesLoadedOptions={imagesLoadedOptions} // default {}
       >
         {Object.values(displayItems)?.map((area) => {
-          return area.map((hospital) => {
+          return area?.map((hospital) => {
             return (
               <Item
                 key={hospital.tel}
