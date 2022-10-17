@@ -207,16 +207,23 @@ const LeftBox = styled.div`
     font-size: 4rem;
     color: #ccc;
     cursor: pointer;
-    &:hover {
-      color: ${theme("red")};
-    }
-  }
 
   #interestClicked {
     color: red;
+
+    ${media.md`
     &:hover {
       color: #ccc;
     }
+    `}
+  }
+  }
+
+  ${media.md`
+    &:hover {
+      color: ${theme("red")};
+    }
+    `}
   }
 
   ${media.xxs`

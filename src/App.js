@@ -12,7 +12,6 @@ import { getDoc } from "firebase/firestore";
 import Profile from "./pages/Profile";
 import axios from "axios";
 import View from "./pages/View";
-import XMLParser from "react-xml-parser";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,14 +47,13 @@ function App() {
   //naver map api 전화번호로 query하여 thum img 추출한 후, spread 문법으로 hospital 객체와 병합.
   const getImgFromNaverMap = useCallback((hospitalArr) => {
     let finalHospitals = null;
-    console.log(hospitalArr);
     try {
       hospitalArr.map(async (hospital) => {
-        axios.defaults.baseURL =
-          process.env.NODE_ENV === "development"
-            ? "https://animalhospital.herokuapp.com/http://localhost:3000/"
-            : "https://animalhospital.herokuapp.com/https://userdwk.github.io/react_animalhospital/";
-        const url = `/naver/v5/api/search?query=${hospital.tel}&type=all&page=1&displayCount=1&isPlaceRecommendationReplace=true&lang=ko`;
+        // axios.defaults.baseURL =
+        //   process.env.NODE_ENV === "development"
+        //     ? "https://animalhospital.herokuapp.com/http://localhost:3000/"
+        //     : "https://animalhospital.herokuapp.com/https://userdwk.github.io/react_animalhospital/";
+        const url = `https://animalhospital.herokuapp.com/map.naver.com/naver/v5/api/search?query=${hospital.tel}&type=all&page=1&displayCount=1&isPlaceRecommendationReplace=true&lang=ko`;
         await axios
           .get(url, {
             headers: {
@@ -119,25 +117,23 @@ function App() {
   const RequestToGetHospitalData = useCallback(async () => {
     let hospitalArr = [];
     try {
-      for (let i = 1; i < 2; i++) {
-        const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=10&pageNo=${i}&resultType=json`;
-        await axios.get(url).then((res) => {
-          const data = res.data.getTblAnimalHospital.body.items.item.map(
-            (hospital) => {
-              //동 데이터 추출.
-              const startIdx = hospital.road_address.indexOf("(") + 1;
-              const endIdx =
-                hospital.road_address.indexOf("동,") !== -1
-                  ? hospital.road_address.indexOf("동,") + 1
-                  : hospital.road_address.indexOf("동)") + 1;
-              const area =
-                hospital.road_address.slice(startIdx, endIdx) || "도로명";
-              return { area, ...hospital };
-            }
-          );
-          hospitalArr = hospitalArr ? [...hospitalArr, ...data] : [...data];
-        });
-      }
+      const url = `https://animalhospital.herokuapp.com/http://apis.data.go.kr/6260000/BusanAnimalHospService/getTblAnimalHospital?serviceKey=${process.env.REACT_APP_PUBLICK_ANIMAL_HOSPITAL_API_KEY}&numOfRows=293&pageNo=1&resultType=json`;
+      await axios.get(url).then((res) => {
+        const data = res.data.getTblAnimalHospital.body.items.item.map(
+          (hospital) => {
+            //동 데이터 추출.
+            const startIdx = hospital.road_address.indexOf("(") + 1;
+            const endIdx =
+              hospital.road_address.indexOf("동,") !== -1
+                ? hospital.road_address.indexOf("동,") + 1
+                : hospital.road_address.indexOf("동)") + 1;
+            const area =
+              hospital.road_address.slice(startIdx, endIdx) || "도로명";
+            return { area, ...hospital };
+          }
+        );
+        hospitalArr = hospitalArr ? [...hospitalArr, ...data] : [...data];
+      });
     } catch (e) {
       console.error(e);
     }
@@ -152,13 +148,19 @@ function App() {
       cnt += item[area].length;
     });
     setInterestCnt(cnt);
-  }, [interestCnt]);
+  }, []);
 
   useEffect(() => {
     checkAuthChanged();
     RequestToGetHospitalData().then((res) => getImgFromNaverMap(res));
     interestItemCnt();
-  }, [checkAuthChanged, getImgFromNaverMap, RequestToGetHospitalData]);
+  }, [
+    checkAuthChanged,
+    getImgFromNaverMap,
+    RequestToGetHospitalData,
+    // interestItemCnt,
+    // interestCnt,
+  ]);
 
   return (
     <>

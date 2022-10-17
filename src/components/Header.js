@@ -325,7 +325,7 @@ const InterestBox = styled.div`
       top: -70%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 3.5rem;
+      font-size: 4rem;
     }
   }
 `;
@@ -336,6 +336,10 @@ const Cnt = styled.span`
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 2rem;
+
+  ${media.xxs`
+  top : -83%;
+  `}
 `;
 
 const Button = styled.button`

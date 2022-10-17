@@ -14,7 +14,6 @@ const MasonryLayout = ({ displayItems, hospitals }) => {
   const getSelectHospitalInfo = (e) => {
     e.preventDefault();
     const [district, area, tel] = e.currentTarget.id.split("_");
-
     const hospital = hospitals[district][area].filter((hos) => {
       return hos.tel === tel;
     });
